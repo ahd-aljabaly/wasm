@@ -279,6 +279,7 @@
 </section>
 
 <!-- قسم أعمالنا (Portfolio Section) -->
+<!-- قسم أعمالنا (Portfolio Section) -->
 <section class="py-20 md:py-24 bg-white border-t border-surface-variant/40" id="portfolio">
     <div class="max-w-[1240px] mx-auto px-6">
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-14 reveal gap-6">
@@ -295,10 +296,10 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-6 gap-6" id="portfolio-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
             @forelse($projects as $project)
-                <div class="portfolio-item {{ $project->service?->slug ?? 'all' }} {{ $project->is_featured ? 'md:col-span-4' : 'md:col-span-2' }} group relative overflow-hidden rounded-2xl bg-primary shadow-sm cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5">
-                    <div class="aspect-[16/9] w-full relative grayscale group-hover:grayscale-0 transition-all duration-700 flex items-center justify-center" style="background-color: {{ $project->accent_color ?? '#172E66' }};">
+                <div class="portfolio-item {{ $project->service?->slug ?? 'all' }} group relative overflow-hidden rounded-2xl bg-primary shadow-sm cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5">
+                    <div class="aspect-[4/3] w-full relative grayscale group-hover:grayscale-0 transition-all duration-700 flex items-center justify-center" style="background-color: {{ $project->accent_color ?? '#172E66' }};">
                         @if($project->cover_image)
                             <img src="{{ asset('storage/' . $project->cover_image) }}" alt="{{ $project->title }}" class="w-full h-full object-cover">
                         @else
@@ -317,8 +318,8 @@
                     </div>
                 </div>
             @empty
-                <div class="portfolio-item branding md:col-span-4 group relative overflow-hidden rounded-2xl bg-primary shadow-sm cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5">
-                    <div class="aspect-[16/9] w-full bg-[#1A2F4C] relative grayscale group-hover:grayscale-0 transition-all duration-700 flex items-center justify-center">
+                <div class="portfolio-item branding group relative overflow-hidden rounded-2xl bg-primary shadow-sm cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5">
+                    <div class="aspect-[4/3] w-full bg-[#1A2F4C] relative grayscale group-hover:grayscale-0 transition-all duration-700 flex items-center justify-center">
                         <div class="absolute -left-10 -top-10 w-48 h-48 rounded-full border-[16px] border-white/5"></div>
                         <div class="absolute left-16 bottom-6 w-24 h-24 rounded-full border-[10px] border-secondary/15"></div>
                     </div>
