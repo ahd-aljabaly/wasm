@@ -85,9 +85,6 @@ class SettingForm
                             ->disk('public')
                             ->directory('settings')
                             ->visibility('public')
-                            ->visible(fn ($get) => $get('get') === 'video' || $get('type') === 'video')
-                            ->columnSpanFull(),
-                    ]),
-            ]);
-    }
-}
+                            ->acceptedFileTypes(['video/mp4', 'video/webm'])
+                            ->visible(fn ($get) => $get('type') === 'video')
+                            ->columnSpanFull(

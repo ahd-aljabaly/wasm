@@ -18,7 +18,9 @@ class SettingSeeder extends Seeder
             // مجموعة: الهيرو
             ['key' => 'hero_title', 'value' => 'نصمم هوية تترك أثراً ونبني حضوراً يُلاحَظ', 'type' => 'text', 'group' => 'hero'],
             ['key' => 'hero_subtitle', 'value' => 'وكالة إبداعية متخصصة في تقديم حلول متكاملة لبناء العلامات التجارية، استراتيجيات التغليف الفاخر، والتسويق الرقمي المرتكز على النتائج الفعالة.', 'type' => 'textarea', 'group' => 'hero'],
-            ['key' => 'logo_url', 'value' => null, 'type' => 'image', 'group' => 'hero'],
+            // الشعار والفيديو يُرفعان من لوحة التحكم (القيمة تُخزَّن كمسار داخل storage مثل settings/logo.png)
+            ['key' => 'logo', 'value' => null, 'type' => 'image', 'group' => 'hero'],
+            ['key' => 'video', 'value' => null, 'type' => 'video', 'group' => 'hero'],
 
             // مجموعة: السوشال ميديا
             ['key' => 'instagram_url', 'value' => '#', 'type' => 'url', 'group' => 'social'],
@@ -27,11 +29,4 @@ class SettingSeeder extends Seeder
 
             // مجموعة: عام
             ['key' => 'site_name', 'value' => 'Wasm Media', 'type' => 'text', 'group' => 'general'],
-            ['key' => 'footer_text', 'value' => 'وكالة إبداعية متخصصة في بناء العلامات التجارية والحلول التسويقية المتكاملة.', 'type' => 'textarea', 'group' => 'general'],
-        ];
-
-        foreach ($settings as $setting) {
-            Setting::updateOrCreate(['key' => $setting['key']], $setting);
-        }
-    }
-}
+            ['key' => 'footer_text', 'value' => 'وكالة إبداعية متخصصة في بناء العلامات التجار

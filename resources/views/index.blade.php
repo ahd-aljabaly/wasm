@@ -85,12 +85,27 @@
 </head>
 <body class="text-slate-800 antialiased overflow-x-hidden">
 
+@php
+    // روابط آمنة للشعار والفيديو: تُبنى من storage إذا رُفعت من لوحة التحكم، وإلا تبقى null
+    $logoUrl = !empty($settings['logo'])
+        ? (str_starts_with($settings['logo'], 'http') ? $settings['logo'] : asset('storage/' . $settings['logo']))
+        : null;
+    $videoUrl = !empty($settings['video'])
+        ? (str_starts_with($settings['video'], 'http') ? $settings['video'] : asset('storage/' . $settings['video']))
+        : null;
+    $siteName = $settings['site_name'] ?? 'Wasm Media';
+@endphp
+
 <!-- القائمة العلوية Navbar -->
 <header class="bg-white/90 backdrop-blur-md fixed w-full top-0 shadow-sm z-50 transition-all border-b border-slate-100">
     <div class="flex justify-between items-center w-full px-6 max-w-[1240px] mx-auto h-20">
         <!-- الـ Logo بدلاً من الكلمة النصية القديمة وبأبعاد متناسقة مقتبسة من الشعار -->
         <a href="#home" class="flex items-center gap-2 h-full py-3">
-            <img src="{{ asset($settings['logo']) }}" alt="Wasm Media" class="h-full w-auto object-contain max-h-[52px]">
+            @if($logoUrl)
+                <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-full w-auto object-contain max-h-[52px]">
+            @else
+                <span class="text-xl md:text-2xl font-black text-[#172E66] tracking-tight">{{ $siteName }}</span>
+            @endif
         </a>
         {{-- {{ $settings['instagram_url'] }} --}}
         <nav class="hidden md:flex gap-8 items-center font-semibold text-sm" id="desktopNav">
@@ -138,11 +153,15 @@
             </div>
 
             <h1 class="reveal text-4xl md:text-5xl lg:text-6xl text-[#172E66] mb-6 leading-[1.25] font-black tracking-tight">
-                نصمم هوية <span class="text-gradient-gold font-black">تترك أثراً</span> ونبني حضوراً يُلاحَظ
+                @if(!empty($settings['hero_title']))
+                    {!! $settings['hero_title'] !!}
+                @else
+                    نصمم هوية <span class="text-gradient-gold font-black">تترك أثراً</span> ونبني حضوراً يُلاحَظ
+                @endif
             </h1>
 
             <p class="reveal text-sm md:text-base text-slate-600 mb-8 max-w-xl font-medium leading-relaxed">
-               {{ $settings['hero_subtitle'] }}
+               {{ $settings['hero_subtitle'] ?? '' }}
             </p>
 
             <div class="reveal flex flex-col sm:flex-row gap-4 w-full sm:w-auto" style="transition-delay: 200ms;">
@@ -160,20 +179,35 @@
     <div class="glass-video-card p-3 md:p-4 rounded-3xl relative shadow-2xl border border-slate-200/40 max-w-xl mx-auto lg:mr-auto lg:ml-0 group bg-white/5">
         <div class="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-inner bg-[#0B1633]">
 
-            <video class="w-full h-full object-cover opacity-100 scale-100 group-hover:scale-105 transition-transform duration-1000" 
-                   autoplay 
-                   loop 
-                   muted 
+            @if($videoUrl)
+            <video class="w-full h-full object-cover opacity-100 scale-100 group-hover:scale-105 transition-transform duration-1000"
+                   autoplay
+                   loop
+                   muted
                    playsinline
                    oncanplay="this.play()"
                    onloadedmetadata="this.muted = true">
-                <source src="{{ asset($settings['video']) }}" type="video/mp4">
+                <source src="{{ $videoUrl }}" type="video/mp4">
             </video>
+            @else
+            {{-- لا يوجد فيديو مرفوع: خلفية متدرّجة فاخرة بشعار الوكالة كبديل --}}
+            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0B1633] via-[#172E66] to-[#0B1633]">
+                @if($logoUrl)
+                    <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-12 w-auto brightness-0 invert opacity-90">
+                @else
+                    <span class="text-2xl font-black text-white/90 tracking-tight">{{ $siteName }}</span>
+                @endif
+            </div>
+            @endif
 
             <div class="absolute inset-0 bg-gradient-to-t from-[#0B1633]/40 via-transparent to-transparent pointer-events-none"></div>
 
             <div class="absolute bottom-4 right-4 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 z-20">
-                <img src="{{ asset($settings['logo']) }}" alt="Wasm Media" class="h-5 w-auto brightness-0 invert">
+                @if($logoUrl)
+                    <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-5 w-auto brightness-0 invert">
+                @else
+                    <span class="text-xs font-black text-white">{{ $siteName }}</span>
+                @endif
             </div>
             
         </div>
@@ -413,7 +447,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] text-on-surface-variant font-bold">اتصال أو واتساب</p>
-                            <p class="text-sm font-extrabold text-primary" dir="ltr">{{ $settings['contact_phone'] }}</p>
+                            <p class="text-sm font-extrabold text-primary" dir="ltr">{{ $settings['contact_phone'] ?? '+966 50 000 0000' }}</p>
                         </div>
                     </div>
                 </div>
@@ -498,8 +532,12 @@
 <footer class="bg-[#0B1633] text-white pt-16 pb-8 border-t border-slate-800 relative z-20">
     <div class="max-w-[1240px] mx-auto px-6">
         <div class="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 border-b border-slate-800">
-            <img src="{{ asset($settings['logo']) }}" alt="Wasm Media" class="h-10 w-auto brightness-0 invert">
-            <p class="text-xs text-slate-400 max-w-sm text-center md:text-right">{{ $settings['footer_text'] }}</p>
+            @if($logoUrl)
+                <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-10 w-auto brightness-0 invert">
+            @else
+                <span class="text-2xl font-black text-white tracking-tight">{{ $siteName }}</span>
+            @endif
+            <p class="text-xs text-slate-400 max-w-sm text-center md:text-right">{{ $settings['footer_text'] ?? '' }}</p>
         </div>
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8">
     <p class="text-[11px] text-slate-500 font-medium">{{ $settings['copyright'] ?? 'جميع الحقوق محفوظة © وسم ميديا' }}</p>
@@ -687,47 +725,4 @@
                     name:    document.getElementById('f-name').value.trim(),
                     company: document.getElementById('f-company').value.trim(),
                     email:   document.getElementById('f-email').value.trim(),
-                    phone:   document.getElementById('f-phone').value.trim(),
-                    service: document.getElementById('f-service').value,
-                    message: document.getElementById('f-message').value.trim(),
-                    _token:  document.querySelector('meta[name="csrf-token"]')?.content ?? '',
-                };
-
-                const response = await fetch('/contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': formData._token,
-                    },
-                    body: JSON.stringify(formData),
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    document.getElementById('formWrap').style.display = 'none';
-                    document.getElementById('formSuccess').classList.add('show');
-                } else {
-                    // عرض رسائل الخطأ من الـ server
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
-                    if (data.errors) {
-                        const fieldMap = { name: 'f-name', email: 'f-email', phone: 'f-phone', service: 'f-service' };
-                        Object.entries(data.errors).forEach(([field, msgs]) => {
-                            if (fieldMap[field]) setError(fieldMap[field]);
-                        });
-                    }
-                }
-            } catch (err) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-                alert('حدث خطأ في الاتصال، يرجى المحاولة مجدداً.');
-            }
-        });
-    }
-</script>
-
-
-</body>
-</html>
+     
