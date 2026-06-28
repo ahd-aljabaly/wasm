@@ -150,4 +150,11 @@
             if (el.getBoundingClientRect().top < window.innerHeight - 60) el.classList.add('active');
         });
     }
-    window.addEventListen
+    window.addEventListener('scroll', reveal);
+    window.addEventListener('DOMContentLoaded', reveal);
+</script>
+
+@include('partials.whatsapp')
+
+</body>
+</html>

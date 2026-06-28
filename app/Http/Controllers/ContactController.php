@@ -6,6 +6,7 @@ use App\Mail\ContactConfirmationMail;
 use App\Mail\NewContactSubmission;
 use App\Models\ContactSubmission;
 use App\Models\Service;
+use App\Models\Setting;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -52,7 +53,10 @@ class ContactController extends Controller
         // إرسال إيميل إشعار للإدارة وإيميل تأكيد للعميل
 
         try {
-            Mail::to(config('mail.admin_address', config('mail.from.address')))
+            // إيميل الاستقبال: من لوحة التحكم (notification_email) ثم من إعداد البيئة كاحتياط
+            $adminEmail = Setting::get('notification_email', config('mail.admin_address', config('mail.from.address')));
+
+            Mail::to($adminEmail)
                 ->send(new NewContactSubmission($submission));
 
             Mail::to($submission->email)

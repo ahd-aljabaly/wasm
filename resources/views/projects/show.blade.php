@@ -296,4 +296,11 @@
             }
         });
     }
-    window
+    window.addEventListener('scroll', reveal);
+    window.addEventListener('DOMContentLoaded', reveal);
+</script>
+
+@include('partials.whatsapp')
+
+</body>
+</html>

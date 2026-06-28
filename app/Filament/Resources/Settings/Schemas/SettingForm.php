@@ -87,4 +87,8 @@ class SettingForm
                             ->visibility('public')
                             ->acceptedFileTypes(['video/mp4', 'video/webm'])
                             ->visible(fn ($get) => $get('type') === 'video')
-                            ->columnSpanFull(
+                            ->columnSpanFull(),
+                    ]),
+            ]);
+    }
+}

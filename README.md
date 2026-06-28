@@ -87,4 +87,16 @@ php artisan test
 ```bash
 composer install --no-dev --optimize-autoloader
 npm install && npm run build
-php artisan migr
+php artisan migrate --force
+php artisan storage:link
+php artisan config:cache && php artisan route:cache && php artisan view:cache
+```
+
+اضبط في `.env`: `APP_ENV=production` و `APP_DEBUG=false` و `APP_URL=https://yourdomain.com`، ووجّه الويب سيرفر إلى مجلد `public/`.
+
+## البنية التقنية
+
+- **Backend:** Laravel 13 (PHP 8.3)
+- **Admin:** Filament 5
+- **Frontend:** Blade + Tailwind CSS 4 (عبر Vite)
+- **قاعدة البيانات:** SQLite افتراضياً (يمكن التحويل لـ MySQL بتغيير `DB_*` في `.env`)

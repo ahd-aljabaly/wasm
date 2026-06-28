@@ -50,4 +50,8 @@ class UserForm
                             ->dehydrated(fn ($state) => filled($state))
                             ->required(fn (string $operation): bool => $operation === 'create')
                             ->maxLength(255)
-                            ->helperText(fn (string $operation): ?str
+                            ->helperText(fn (string $operation): ?string => $operation === 'edit' ? 'اتركه فارغاً إذا كنت لا تريد تغيير كلمة المرور' : null),
+                    ]),
+            ]);
+    }
+}

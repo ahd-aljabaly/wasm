@@ -728,4 +728,56 @@
             // إرسال البيانات لقاعدة البيانات عبر الـ API
             const submitBtn = contactForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
-            submit
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>جارٍ الإرسال...</span><span class="material-symbols-outlined text-sm animate-spin">progress_activity</span>';
+
+            try {
+                const formData = {
+                    name:    document.getElementById('f-name').value.trim(),
+                    company: document.getElementById('f-company').value.trim(),
+                    email:   document.getElementById('f-email').value.trim(),
+                    phone:   document.getElementById('f-phone').value.trim(),
+                    service: document.getElementById('f-service').value,
+                    message: document.getElementById('f-message').value.trim(),
+                    _token:  document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                };
+
+                const response = await fetch('/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': formData._token,
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    document.getElementById('formWrap').style.display = 'none';
+                    document.getElementById('formSuccess').classList.add('show');
+                } else {
+                    // عرض رسائل الخطأ من الـ server
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    if (data.errors) {
+                        const fieldMap = { name: 'f-name', email: 'f-email', phone: 'f-phone', service: 'f-service' };
+                        Object.entries(data.errors).forEach(([field, msgs]) => {
+                            if (fieldMap[field]) setError(fieldMap[field]);
+                        });
+                    }
+                }
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                alert('حدث خطأ في الاتصال، يرجى المحاولة مجدداً.');
+            }
+        });
+    }
+</script>
+
+@include('partials.whatsapp')
+
+</body>
+</html>
