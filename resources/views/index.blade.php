@@ -332,7 +332,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
             @forelse($projects as $project)
-                <div class="portfolio-item {{ $project->service?->slug ?? 'all' }} group relative overflow-hidden rounded-2xl bg-primary shadow-sm cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5">
+                <a href="{{ route('projects.show', $project->slug) }}" class="portfolio-item {{ $project->service?->slug ?? 'all' }} block group relative overflow-hidden rounded-2xl bg-primary shadow-sm cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5">
                     <div class="aspect-[4/3] w-full relative grayscale group-hover:grayscale-0 transition-all duration-700 flex items-center justify-center" style="background-color: {{ $project->accent_color ?? '#172E66' }};">
                         @if($project->cover_image)
                             <img src="{{ asset('storage/' . $project->cover_image) }}" alt="{{ $project->title }}" class="w-full h-full object-cover">
@@ -350,7 +350,7 @@
                         <!-- line-clamp-2 لتثبيت الوصف على سطرين كحد أقصى -->
                         <p class="text-secondary-fixed text-xs opacity-90 line-clamp-2">{{ $project->short_description }}</p>
                     </div>
-                </div>
+                </a>
             @empty
                 <div class="portfolio-item branding group relative overflow-hidden rounded-2xl bg-primary shadow-sm cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5">
                     <div class="aspect-[4/3] w-full bg-[#1A2F4C] relative grayscale group-hover:grayscale-0 transition-all duration-700 flex items-center justify-center">
@@ -724,5 +724,4 @@
                 const formData = {
                     name:    document.getElementById('f-name').value.trim(),
                     company: document.getElementById('f-company').value.trim(),
-                    email:   document.getElementById('f-email').value.trim(),
-     
+                    email:   
