@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 - خطأ في الخادم</title>
+    <title>500 - خطأ في الخادم | وسم ميديا</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background: #0b0f19; color: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 20px; }
-        .error-card { max-width: 500px; background: #111827; border: 1px solid #1f2937; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .error-code { font-size: 80px; font-weight: 900; background: linear-gradient(135deg, #ef4444, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: 20px; }
-        h1 { font-size: 24px; margin-bottom: 12px; }
-        p { color: #9ca3af; margin-bottom: 30px; font-size: 16px; line-height: 1.6; }
-        .btn { display: inline-block; background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; transition: transform 0.2s, opacity 0.2s; }
-        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', system-ui, sans-serif; }
+        body { background: #FDFDFB; color: #172E66; display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 20px; }
+        .error-card { max-width: 520px; background: #ffffff; border: 1px solid #eef0f4; padding: 48px 40px; border-radius: 24px; box-shadow: 0 30px 60px -15px rgba(23,46,102,0.10); }
+        .error-code { font-size: 96px; font-weight: 900; background: linear-gradient(135deg, #EAD08B, #C5A24A 50%, #9A7B31); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: 16px; }
+        h1 { font-size: 24px; font-weight: 800; margin-bottom: 12px; }
+        p { color: #5b6478; margin-bottom: 32px; font-size: 15px; line-height: 1.8; }
+        .btn { display: inline-block; background: #172E66; color: #fff; text-decoration: none; padding: 13px 32px; border-radius: 12px; font-weight: 700; font-size: 14px; transition: background 0.2s, transform 0.2s; }
+        .btn:hover { background: #0B1633; transform: translateY(-2px); }
     </style>
 </head>
 <body>
     <div class="error-card">
         <div class="error-code">500</div>
-        <h1>حدث خطأ غيرة متوقع</h1>
+        <h1>حدث خطأ غير متوقع</h1>
         <p>نعتذر عن هذا الخلل، نحن نعمل على إصلاحه حالياً. يرجى المحاولة مرة أخرى لاحقاً.</p>
         <a href="{{ url('/') }}" class="btn">العودة للرئيسية</a>
     </div>
