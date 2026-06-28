@@ -57,4 +57,13 @@ class UserResource extends Resource
     {
         return $record instanceof User && $record->canBeDeleted();
     }
+
+    /**
+     * إدارة المستخدمين متاحة فقط للمدير الفائق (super_admin)
+     * تخفي القسم من القائمة وتمنع الوصول لروابطه لأي صلاحية أخرى.
+     */
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->isSuperAdmin() ?? false;
+    }
 }

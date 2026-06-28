@@ -38,18 +38,16 @@ class UserForm
                                 'editor'      => 'محرر محتوى',
                             ])
                             ->default('admin')
-                            ->disabled(fn ($record) => $record && $record->isSuperAdmin() && auth()->user()->id !== $record->id)
+                            // رتبة المدير الفائق غير قابلة للتغيير (حماية من قفل الحساب أو فقدان الصلاحية)
+                            ->disabled(fn ($record) => $record && $record->isSuperAdmin())
                             ->dehydrated(),
 
                         TextInput::make('password')
                             ->label('كلمة المرور')
                             ->password()
+                            ->revealable()
                             ->dehydrateStateUsing(fn ($state) => filled($state) ? Hash::make($state) : null)
                             ->dehydrated(fn ($state) => filled($state))
                             ->required(fn (string $operation): bool => $operation === 'create')
                             ->maxLength(255)
-                            ->helperText(fn (string $operation): ?string => $operation === 'edit' ? 'اتركه فارغاً إذا كنت لا تريد تغيير كلمة المرور' : null),
-                    ]),
-            ]);
-    }
-}
+                            ->helperText(fn (string $operation): ?str
