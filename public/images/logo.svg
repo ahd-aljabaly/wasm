@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" role="img" aria-label="وسم ميديا">
+  <!-- الرمز -->
+  <g>
+    <rect x="2" y="6" width="44" height="44" rx="12" fill="#172E66"/>
+    <circle cx="24" cy="28" r="11" fill="none" stroke="#C5A24A" stroke-width="3.2"/>
+    <circle cx="24" cy="28" r="3.2" fill="#C5A24A"/>
+  </g>
+  <!-- الاسم -->
+  <text x="58" y="27" font-family="'Cairo','Segoe UI',Tahoma,sans-serif" font-size="22" font-weight="800" fill="#172E66">وسم</text>
+  <text x="58" y="46" font-family="'Cairo','Segoe UI',Tahoma,sans-serif" font-size="13" font-weight="600" fill="#C5A24A" letter-spacing="1">MEDIA</text>
+</svg>

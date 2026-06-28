@@ -15,7 +15,8 @@
         <meta property="og:image" content="{{ $project->cover_image_url }}">
     @endif
 
-    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/aida-public/AB6AXuC5KwllLaRSR4QJiFtN2ZzN0XFCCkUiF5EYEx0Y1-plsUwQ0C55yJ_Xc511CmvxuGJh9U9wiOQqdh9vqi5BHIjpqIyIYVZVOKb1qhN_-SjT2mdSucLNeAzht3azBEv6f484bF6H1-bcwnVYA39H940NWMJ-1nrtYK4w-bpIID_L4XjpoVb1Mf9npGjt4g7SHYuokblZOiMQT5I1UzSPIYMv3iph5Mmdz32FXNNMxTJkYcegDY2I_6Azq2iBpSp1Vj3tskFG8GZLng">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -63,8 +64,9 @@
 <body class="text-slate-800 antialiased overflow-x-hidden">
 
 @php
-    $logoUrl = !empty($settings['logo'])
-        ? (str_starts_with($settings['logo'], 'http') ? $settings['logo'] : asset('storage/' . $settings['logo']))
+    $logoVal = $settings['logo'] ?? null;
+    $logoUrl = !empty($logoVal)
+        ? ((str_starts_with($logoVal, 'http') || str_starts_with($logoVal, '/')) ? $logoVal : asset('storage/' . $logoVal))
         : null;
     $siteName = $settings['site_name'] ?? 'Wasm Media';
 
@@ -295,6 +297,8 @@
     window.addEventListener('scroll', reveal);
     window.addEventListener('DOMContentLoaded', reveal);
 </script>
+
+@include('partials.whatsapp')
 
 </body>
 </html>

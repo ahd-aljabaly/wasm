@@ -7,9 +7,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// صفحة تفاصيل مشروع منفرد (ربط عبر slug)
-Route::get('/projects/{project:slug}', [ProjectController::class, 'show'])
-    ->name('projects.show');
+// صفحة كل الأعمال (مع فلترة وترقيم)
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 
-Route::post('/contact', [ContactController::class, 'store'])
-    ->middleware('throt
+// صفحة تفاصيل مشروع منفرد (ربط عبر slug)
+Route::get('/projects/{project:slug}', 

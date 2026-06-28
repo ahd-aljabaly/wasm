@@ -12,7 +12,8 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
 
-    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/aida-public/AB6AXuC5KwllLaRSR4QJiFtN2ZzN0XFCCkUiF5EYEx0Y1-plsUwQ0C55yJ_Xc511CmvxuGJh9U9wiOQqdh9vqi5BHIjpqIyIYVZVOKb1qhN_-SjT2mdSucLNeAzht3azBEv6f484bF6H1-bcwnVYA39H940NWMJ-1nrtYK4w-bpIID_L4XjpoVb1Mf9npGjt4g7SHYuokblZOiMQT5I1UzSPIYMv3iph5Mmdz32FXNNMxTJkYcegDY2I_6Azq2iBpSp1Vj3tskFG8GZLng">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -87,11 +88,13 @@
 
 @php
     // روابط آمنة للشعار والفيديو: تُبنى من storage إذا رُفعت من لوحة التحكم، وإلا تبقى null
-    $logoUrl = !empty($settings['logo'])
-        ? (str_starts_with($settings['logo'], 'http') ? $settings['logo'] : asset('storage/' . $settings['logo']))
+    $logoVal = $settings['logo'] ?? null;
+    $logoUrl = !empty($logoVal)
+        ? ((str_starts_with($logoVal, 'http') || str_starts_with($logoVal, '/')) ? $logoVal : asset('storage/' . $logoVal))
         : null;
-    $videoUrl = !empty($settings['video'])
-        ? (str_starts_with($settings['video'], 'http') ? $settings['video'] : asset('storage/' . $settings['video']))
+    $videoVal = $settings['video'] ?? null;
+    $videoUrl = !empty($videoVal)
+        ? ((str_starts_with($videoVal, 'http') || str_starts_with($videoVal, '/')) ? $videoVal : asset('storage/' . $videoVal))
         : null;
     $siteName = $settings['site_name'] ?? 'Wasm Media';
 @endphp
@@ -366,6 +369,13 @@
                     </div>
                 </div>
             @endforelse
+        </div>
+
+        <div class="flex justify-center mt-12 reveal">
+            <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-2 bg-[#172E66] text-white text-xs md:text-sm font-bold px-8 py-4 rounded-xl hover:bg-[#0B1633] transition-all shadow-lg shadow-blue-900/10">
+                <span>عرض جميع الأعمال</span>
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+            </a>
         </div>
     </div>
 </section>
@@ -718,10 +728,4 @@
             const submitBtn = contactForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span>جارٍ الإرسال...</span><span class="material-symbols-outlined text-sm animate-spin">progress_activity</span>';
-
-            try {
-                const formData = {
-                    name:    document.getElementById('f-name').value.trim(),
-                    company: document.getElementById('f-company').value.trim(),
-                    email:   
+            submitBtn.innerHTML = '<span>جارٍ الإرسال...</span><span 
