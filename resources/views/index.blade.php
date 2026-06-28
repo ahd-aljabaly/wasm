@@ -15,6 +15,8 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -316,7 +318,6 @@
 </section>
 
 <!-- قسم أعمالنا (Portfolio Section) -->
-<!-- قسم أعمالنا (Portfolio Section) -->
 <section class="py-20 md:py-24 bg-white border-t border-surface-variant/40" id="portfolio">
     <div class="max-w-[1240px] mx-auto px-6">
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-14 reveal gap-6">
@@ -338,7 +339,7 @@
                 <a href="{{ route('projects.show', $project->slug) }}" class="portfolio-item {{ $project->service?->slug ?? 'all' }} block group relative overflow-hidden rounded-2xl bg-primary shadow-sm cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5">
                     <div class="aspect-[4/3] w-full relative grayscale group-hover:grayscale-0 transition-all duration-700 flex items-center justify-center" style="background-color: {{ $project->accent_color ?? '#172E66' }};">
                         @if($project->cover_image)
-                            <img src="{{ asset('storage/' . $project->cover_image) }}" alt="{{ $project->title }}" class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/' . $project->cover_image) }}" alt="{{ $project->title }}" loading="lazy" class="w-full h-full object-cover">
                         @else
                             <div class="absolute -left-10 -top-10 w-48 h-48 rounded-full border-[16px] border-white/5"></div>
                             <div class="absolute left-16 bottom-6 w-24 h-24 rounded-full border-[10px] border-secondary/15"></div>
@@ -727,5 +728,4 @@
             // إرسال البيانات لقاعدة البيانات عبر الـ API
             const submitBtn = contactForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span>جارٍ الإرسال...</span><span 
+            submit

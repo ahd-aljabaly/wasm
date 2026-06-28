@@ -11,6 +11,8 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -148,11 +150,4 @@
             if (el.getBoundingClientRect().top < window.innerHeight - 60) el.classList.add('active');
         });
     }
-    window.addEventListener('scroll', reveal);
-    window.addEventListener('DOMContentLoaded', reveal);
-</script>
-
-@include('partials.whatsapp')
-
-</body>
-</html>
+    window.addEventListen

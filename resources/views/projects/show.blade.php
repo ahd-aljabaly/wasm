@@ -18,6 +18,8 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -227,7 +229,7 @@
                     <a href="{{ route('projects.show', $item->slug) }}" class="reveal group relative overflow-hidden rounded-2xl bg-primary shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 block">
                         <div class="aspect-[4/3] w-full relative grayscale group-hover:grayscale-0 transition-all duration-700 flex items-center justify-center" style="background-color: {{ $item->accent_color ?? '#172E66' }};">
                             @if($item->cover_image)
-                                <img src="{{ $item->cover_image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover">
+                                <img src="{{ $item->cover_image_url }}" alt="{{ $item->title }}" loading="lazy" class="w-full h-full object-cover">
                             @else
                                 <div class="absolute -left-10 -top-10 w-48 h-48 rounded-full border-[16px] border-white/5"></div>
                             @endif
@@ -294,11 +296,4 @@
             }
         });
     }
-    window.addEventListener('scroll', reveal);
-    window.addEventListener('DOMContentLoaded', reveal);
-</script>
-
-@include('partials.whatsapp')
-
-</body>
-</html>
+    window
