@@ -16,13 +16,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // إنشاء مستخدم admin للوحة التحكم Filament
+        // إنشاء مستخدم admin للوحة التحكم Filament من ملف البيئة أو الافتراضي
+        $adminEmail = env('ADMIN_EMAIL', 'admin@wasmmedia.com');
         User::updateOrCreate(
-            ['email' => 'admin@wasmmedia.com'],
+            ['email' => $adminEmail],
             [
                 'name'     => 'Wasm Admin',
-                'email'    => 'admin@wasmmedia.com',
-                'password' => Hash::make('admin123'),
+                'email'    => $adminEmail,
+                'password' => Hash::make(env('ADMIN_PASSWORD', 'admin123')),
                 'role'     => 'super_admin',
             ]
         );

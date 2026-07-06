@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Filament\Models\Contracts\FilamentUser; // 1. استدعاء الكلاس الخاص بـ Filament
-use Filament\Panel; // 2. استدعاء كلاس الـ Panel
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements FilamentUser // 3. تطبيق الـ Interface هنا
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -24,8 +24,8 @@ class User extends Authenticatable implements FilamentUser // 3. تطبيق ال
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return in_array($this->role, ['super_admin', 'admin', 'editor']) 
-            || str_ends_with($this->email, 'wasemmedia@gmail.com') 
+        return in_array($this->role, ['super_admin', 'admin', 'editor'])
+            || str_ends_with($this->email, 'wasemmedia@gmail.com')
             || $this->email === 'admin@wasmmedia.com';
     }
 
@@ -58,4 +58,3 @@ class User extends Authenticatable implements FilamentUser // 3. تطبيق ال
         ];
     }
 }
-

@@ -23,3 +23,4 @@ Route::get('/sitemap.xml', function () {
     $content = view('sitemap', ['projects' => $projects])->render();
     return response($content, 200)->header('Content-Type', 'text/xml');
 })->name('sitemap');
+

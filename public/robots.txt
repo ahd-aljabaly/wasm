@@ -2,5 +2,19 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /livewire/
+Disallow: /storage/app/
+Disallow: /vendor/
+Disallow: /node_modules/
 
-Sitemap: /sitemap.xml
+# Sitemap — استبدل بدومينك الحقيقي عند الرفع
+Sitemap: https://wasmmedia.com/sitemap.xml
+
+# الروبوتات المرغوب إيقافها
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

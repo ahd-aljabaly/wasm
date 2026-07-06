@@ -4,142 +4,148 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Cairo', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Cairo', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    --color-on-primary-fixed-variant: #2f447d;
+    --color-primary: #172E66;
+    --color-primary-dark: #0B1633;
+    --color-secondary: #C5A24A;
+    --color-background: #FDFDFB;
+
     --color-on-primary: #ffffff;
-    --color-on-tertiary-fixed: #191c1d;
-    --color-background: #fbf9f8;
-    --color-primary: #00184c;
     --color-on-secondary: #ffffff;
-    --color-on-primary-fixed: #00174a;
-    --color-surface-container-lowest: #ffffff;
-    --color-secondary: #795901;
-    --color-on-surface-variant: #444650;
-    --color-primary-fixed-dim: #b3c5ff;
-    --color-error: #ba1a1a;
-    --color-inverse-on-surface: #f3f0f0;
-    --color-surface-tint: #485c96;
-    --color-surface-dim: #dcd9d9;
-    --color-surface-variant: #e4e2e1;
-    --color-on-error-container: #93000a;
-    --color-inverse-surface: #303030;
-    --color-secondary-fixed-dim: #ecc166;
-    --color-surface-bright: #fbf9f8;
-    --color-secondary-fixed: #ffdea0;
-    --color-on-tertiary-container: #989a9b;
-    --color-on-secondary-container: #785800;
-    --color-outline: #757681;
-    --color-surface-container: #f0eded;
-    --color-surface-container-low: #f6f3f2;
-    --color-primary-container: #172e66;
-    --color-primary-fixed: #dbe1ff;
-    --color-tertiary-container: #2f3233;
-    --color-tertiary-fixed-dim: #c5c7c8;
-    --color-inverse-primary: #b3c5ff;
-    --color-on-background: #1b1c1c;
-    --color-surface-container-highest: #e4e2e1;
-    --color-secondary-container: #fed175;
-    --color-on-primary-container: #8397d6;
-    --color-tertiary: #1a1d1e;
-    --color-error-container: #ffdad6;
-    --color-on-tertiary-fixed-variant: #454748;
-    --color-outline-variant: #c5c6d1;
-    --color-tertiary-fixed: #e1e3e4;
     --color-surface: #fbf9f8;
-    --color-on-secondary-fixed-variant: #5c4300;
+    --color-surface-variant: #e4e2e1;
     --color-on-surface: #1b1c1c;
-    --color-on-tertiary: #ffffff;
-    --color-on-error: #ffffff;
-    --color-surface-container-high: #eae8e7;
-    --color-on-secondary-fixed: #261a00;
+    --color-on-surface-variant: #444650;
+    --color-surface-container-low: #f6f3f2;
+    --color-error: #ba1a1a;
 }
 
 body {
     font-family: 'Cairo', sans-serif;
+    background-color: var(--color-background);
 }
 
+/* التوهجات والتدرجات اللونية الفخمة */
+.text-gradient-gold {
+    background: linear-gradient(135deg, #EAD08B 0%, #C5A24A 50%, #9A7B31 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #1D397C 0%, #172E66 50%, #0B1633 100%);
+}
+
+/* تأثير البطاقات الزجاجية الحديثة */
 .glass-card {
-    background: rgba(255, 255, 255, 0.78);
+    background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 25px 50px -12px rgba(0, 24, 76, 0.06);
+    box-shadow: 0 20px 50px -15px rgba(23, 46, 102, 0.05);
 }
 
+.glass-video-card-dark {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* شبكة الخلفية مثل Omniux */
+.lines-layer-dark {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.lines-layer-light {
+    background-image: linear-gradient(rgba(23, 46, 102, 0.015) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(23, 46, 102, 0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* تأثير ظهور العناصر عند التمرير */
 .reveal {
     opacity: 0;
-    transform: translateY(25px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(40px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
 }
 
-.lines-layer {
-    background-image: linear-gradient(rgba(0, 24, 76, 0.02) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0, 24, 76, 0.02) 1px, transparent 1px);
-    background-size: 50px 50px;
+/* تأثير الإضاءة الحركية المستوحى من Omniux للبطاقات */
+.bento-glow-card {
+    position: relative;
+    overflow: hidden;
+}
+.bento-glow-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(197, 162, 74, 0.08), transparent 40%);
+    z-index: 1;
+    pointer-events: none;
 }
 
-@keyframes pulse-slow {
+/* الأنميشن والحركات التفاعلية */
+@keyframes pulseSlow {
     0%, 100% { transform: scale(1) translate(0px, 0px); opacity: 0.4; }
-    50% { transform: scale(1.1) translate(30px, -15px); opacity: 0.65; }
+    50% { transform: scale(1.15) translate(20px, -20px); opacity: 0.7; }
 }
-
-.animate-pulse-slow {
-    animation: pulse-slow 9s ease-in-out infinite;
+@keyframes pulseSlowReverse {
+    0%, 100% { transform: scale(1.1) translate(0px, 0px); opacity: 0.5; }
+    50% { transform: scale(0.95) translate(-30px, 15px); opacity: 0.8; }
 }
-
-.animate-pulse-slow-reverse {
-    animation: pulse-slow 13s ease-in-out infinite reverse;
-}
-
 @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+@keyframes scrollDot {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(14px); opacity: 0; }
 }
 
-.floating-logo {
-    animation: float 4.5s ease-in-out infinite;
+.animate-pulse-slow { animation: pulseSlow 10s ease-in-out infinite; }
+.animate-pulse-slow-reverse { animation: pulseSlow-reverse 12s ease-in-out infinite; }
+.floating-logo { animation: float 4s ease-in-out infinite; }
+.animate-scroll-dot { animation: scrollDot 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+
+/* حركة الجسيمات الطائرة */
+.particle { position: absolute; border-radius: 50%; background: rgba(197,162,74,0.3); animation: particle-float 15s ease-in-out infinite; pointer-events: none; }
+.particle-1 { width: 6px; height: 6px; top: 25%; left: 10%; animation-delay: 0s; }
+.particle-2 { width: 10px; height: 10px; top: 65%; left: 20%; animation-delay: 3s; background: rgba(59,90,160,0.3); }
+.particle-3 { width: 8px; height: 8px; top: 40%; right: 15%; animation-delay: 5s; }
+.particle-4 { width: 5px; height: 5px; top: 80%; right: 25%; animation-delay: 8s; background: rgba(59,90,160,0.3); }
+
+@keyframes particle-float {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0; }
+    8%, 90% { opacity: 1; }
+    50% { transform: translate(40px, -60px) scale(1.2); }
 }
 
-.filter-btn.active {
-    background-color: #00184c !important;
-    color: #ffffff !important;
-    border-color: #00184c !important;
-    box-shadow: 0 4px 12px rgba(0, 24, 76, 0.15);
+/* التحكم بالنوافذ المنبثقة وأخطاء الإدخال */
+.form-success-box { display: none; }
+.form-success-box.show { display: block !important; }
+.field-error-msg { display: none; }
+.field-error-msg.show { display: block !important; }
+.field-error { border-color: var(--color-error) !important; background-color: rgba(186, 26, 26, 0.02) !important; }
+
+@font-face {
+    font-family: 'Shubbak';
+    src: url('../fonts/Shubbak-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
 }
 
-input:focus, select:focus, textarea:focus {
-    outline: none !important;
-    box-shadow: 0 0 0 4px rgba(0, 24, 76, 0.08) !important;
+/* 2. إجبار خط شباك على نصوص الموقع بالكامل */
+*, ::before, ::after {
+    font-family: 'Shubbak', system-ui, -apple-system, sans-serif !important;
 }
 
-.field-error {
-    border-color: #ba1a1a !important;
-}
-
-.field-error-msg {
-    display: none;
-    color: #ba1a1a;
-    font-size: 11px;
-    font-weight: 700;
-    margin-top: 4px;
-}
-
-.field-error-msg.show {
-    display: block;
-}
-
-.form-success-box {
-    display: none;
-    text-align: center;
-    padding: 40px 10px;
-}
-
-.form-success-box.show {
-    display: block;
+/* 3. حماية وإصلاح خط الأيقونات لكي لا يخرب */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
 }

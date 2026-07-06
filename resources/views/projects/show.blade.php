@@ -4,24 +4,51 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $project->title }} | {{ $settings['site_name'] ?? 'Wasm Media' }}</title>
-    <meta name="description" content="{{ \Illuminate\Support\Str::limit(strip_tags($project->short_description), 150) }}">
-    <link rel="canonical" href="{{ url()->current() }}">
-    <meta property="og:title" content="{{ $project->title }} | {{ $settings['site_name'] ?? 'Wasm Media' }}">
-    <meta property="og:description" content="{{ \Illuminate\Support\Str::limit(strip_tags($project->short_description), 150) }}">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="{{ url()->current() }}">
-    @if($project->cover_image)
-        <meta property="og:image" content="{{ $project->cover_image_url }}">
-    @endif
 
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php
+        $logoValP = $settings['logo'] ?? null;
+        $logoUrlP = !empty($logoValP)
+            ? ((str_starts_with($logoValP, 'http') || str_starts_with($logoValP, '/')) ? $logoValP : asset('storage/' . $logoValP))
+            : asset('images/logo.svg');
+        $siteNameP = $settings['site_name'] ?? 'Wasm Media';
+        $ogImgP = $project->cover_image ? asset('storage/' . $project->cover_image) : $logoUrlP;
+        $descP = \Illuminate\Support\Str::limit(strip_tags($project->short_description), 150);
+    @endphp
+
+    <title>{{ $project->title }} | {{ $siteNameP }}</title>
+    <meta name="description" content="{{ $descP }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ route('projects.show', $project->slug) }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ route('projects.show', $project->slug) }}">
+    <meta property="og:title" content="{{ $project->title }} | {{ $siteNameP }}">
+    <meta property="og:description" content="{{ $descP }}">
+    <meta property="og:image" content="{{ $ogImgP }}">
+    <meta property="og:image:alt" content="{{ $project->title }}">
+    <meta property="og:site_name" content="{{ $siteNameP }}">
+    <meta property="og:locale" content="ar_SA">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $project->title }} | {{ $siteNameP }}">
+    <meta name="twitter:description" content="{{ $descP }}">
+    <meta name="twitter:image" content="{{ $ogImgP }}">
+
+    {{-- Favicon --}}
+    <link rel="icon" type="image/svg+xml" href="{{ $logoUrlP }}">
+    <link rel="alternate icon" href="{{ $logoUrlP }}">
+    <link rel="apple-touch-icon" href="{{ $logoUrlP }}">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#172E66">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
     <style>
         :root {
@@ -205,20 +232,32 @@
 
     <!-- معرض الصور -->
     @if($gallery->isNotEmpty())
-    <section class="pb-16 md:pb-20 bg-white">
-        <div class="max-w-[1100px] mx-auto px-6">
-            <h2 class="text-xl md:text-2xl text-[#172E66] font-extrabold mb-8 reveal">معرض المشروع</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                @foreach($gallery as $img)
-                    <div class="reveal rounded-2xl overflow-hidden shadow-md border border-slate-200/50 bg-slate-100">
-                        <img src="{{ $img }}" alt="{{ $project->title }}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
-                    </div>
-                @endforeach
-            </div>
+<section class="pb-16 md:pb-24 bg-white">
+    <div class="max-w-[1100px] mx-auto px-6">
+        
+        <div class="flex items-center gap-3 mb-10 reveal">
+            <span class="w-2 h-6 bg-[#C5A24A] rounded-full"></span>
+            <h2 class="text-xl md:text-2xl text-[#172E66] font-extrabold tracking-tight">معرض لقطات المشروع</h2>
         </div>
-    </section>
-    @endif
-
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($gallery as $img)
+                <div class="reveal group/gallery rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 bg-slate-50 relative aspect-[4/3] transition-all duration-500 hover:-translate-y-1">
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#172E66]/30 via-transparent to-transparent opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
+                    
+                    <img src="{{ $img }}" 
+                         alt="{{ $project->title }}" 
+                         loading="lazy" 
+                         class="w-full h-full object-cover object-center scale-100 group-hover/gallery:scale-105 transition-transform duration-700 ease-out">
+                         
+                </div>
+            @endforeach
+        </div>
+        
+    </div>
+</section>
+@endif
     <!-- مشاريع مرتبطة -->
     @if($related->isNotEmpty())
     <section class="py-16 md:py-20 bg-[#FDFDFB] border-t border-slate-100">
@@ -260,30 +299,65 @@
 </main>
 
 <!-- الفوتر (Footer) -->
-<footer class="bg-[#0B1633] text-white pt-16 pb-8 border-t border-slate-800 relative z-20">
+<footer class="bg-[#0B1633] text-white pt-10 pb-6 border-t border-slate-800/60 relative z-20">
     <div class="max-w-[1240px] mx-auto px-6">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 border-b border-slate-800">
-            @if($logoUrl)
-                <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-10 w-auto brightness-0 invert">
-            @else
-                <span class="text-2xl font-black text-white tracking-tight">{{ $siteName }}</span>
-            @endif
-            <p class="text-xs text-slate-400 max-w-sm text-center md:text-right">{{ $settings['footer_text'] ?? '' }}</p>
-        </div>
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8">
-            <p class="text-[11px] text-slate-500 font-medium">{{ $settings['copyright'] ?? 'جميع الحقوق محفوظة © وسم ميديا' }}</p>
-            <div class="flex flex-wrap gap-3 justify-center">
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-6 pb-6 border-b border-slate-800/40">
+
+            <div class="flex-shrink-0">
+                @if($logoUrl)
+                    <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-8 w-auto brightness-0 invert opacity-90">
+                @else
+                    <span class="text-xl font-black text-white tracking-tight">{{ $siteName }}</span>
+                @endif
+            </div>
+
+            <div class="flex flex-wrap gap-2.5 justify-center">
                 @foreach($settings as $key => $url)
                     @if(str_ends_with($key, '_url') && !empty($url))
                         @php $platform = str_replace('_url', '', $key); @endphp
+
                         <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" title="{{ ucfirst($platform) }}"
-                           class="w-9 h-9 rounded-xl border border-slate-800 flex items-center justify-center text-slate-400 transition-all duration-300 hover:-translate-y-1 hover:text-[#C5A24A] bg-slate-900/20">
-                            <span class="material-symbols-outlined text-base">public</span>
+                           class="w-8 h-8 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 transition-all duration-300 hover:bg-slate-800 hover:text-white"
+                           data-platform="{{ $platform }}">
+
+                            @if($platform === 'facebook')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                            @elseif($platform === 'instagram')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>
+                            @elseif($platform === 'linkedin')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                            @elseif(in_array($platform, ['twitter', 'x']))
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            @elseif($platform === 'tiktok')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+                            @elseif($platform === 'youtube')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2" ry="2"/><path d="M10 9l5 3-5 3z"/></svg>
+                            @elseif($platform === 'behance')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12H3V9h9v3zm0 4H3v-3h9v3zm1-7h8v2h-8V9zm1 4.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5-2.5 1.12-2.5 2.5z"/></svg>
+                            @elseif($platform === 'pinterest')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/><circle cx="12" cy="12" r="10"/></svg>
+                            @elseif($platform === 'whatsapp')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                            @elseif($platform === 'messenger')
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/><path d="M8 14l3-3 2.5 2.5L16 10l-3 3-2.5-2.5L8 14z" fill="currentColor" stroke="none"/></svg>
+                            @else
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            @endif
+
                         </a>
                     @endif
                 @endforeach
             </div>
         </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-5 text-[11px] text-slate-500">
+            <p class="font-medium text-center sm:text-right">{{ $settings['copyright'] ?? 'جميع الحقوق محفوظة © وسم ميديا' }}</p>
+            @if(!empty($settings['footer_text']))
+                <p class="text-slate-400/80 text-center sm:text-left max-w-md">{{ $settings['footer_text'] }}</p>
+            @endif
+        </div>
+
     </div>
 </footer>
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class Service extends Model
 {
@@ -26,6 +27,15 @@ class Service extends Model
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * مسح كاش الصفحة الرئيسية تلقائياً عند تعديل أي خدمة من لوحة التحكم.
+     */
+    protected static function booted(): void
+    {
+        static::saved(fn () => Cache::forget('home_services'));
+        static::deleted(fn () => Cache::forget('home_services'));
+    }
 
     /**
      * كل المشاريع المرتبطة بهذه الخدمة.

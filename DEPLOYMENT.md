@@ -65,12 +65,16 @@ chmod -R 775 storage bootstrap/cache
 
 - [ ] `APP_ENV=production` و `APP_DEBUG=false`
 - [ ] `APP_KEY` مولّد (`php artisan key:generate`)
-- [ ] `APP_URL` يطابق نطاقك مع https
+- [ ] `APP_URL` يطابق نطاقك مع https (يُستخدم في الـ og:image وsitemap)
 - [ ] **تغيير كلمة مرور المدير** الافتراضية `admin123` من لوحة التحكم فوراً
 - [ ] ضبط بيانات SMTP وتجربة إرسال طلب تواصل
 - [ ] تعيين `notification_email` من لوحة التحكم (إعدادات) لبريدك الحقيقي
 - [ ] رفع الشعار الحقيقي من لوحة التحكم (إعدادات → logo)
 - [ ] تنفيذ `php artisan storage:link`
+- [ ] تعديل `Sitemap:` في `public/robots.txt` ليشير لدومينك الحقيقي
+- [ ] التحقق من ظهور صورة المعاينة عند مشاركة الرابط (Open Graph) عبر: https://developers.facebook.com/tools/debug/
+- [ ] التحقق من Sitemap: `https://your-domain.com/sitemap.xml`
+
 
 ## الدخول للوحة التحكم
 

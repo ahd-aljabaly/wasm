@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class ProcessStep extends Model
 {
@@ -20,6 +21,12 @@ class ProcessStep extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        static::saved(fn () => Cache::forget('home_process_steps'));
+        static::deleted(fn () => Cache::forget('home_process_steps'));
+    }
 
     public function scopeActive($query)
     {
