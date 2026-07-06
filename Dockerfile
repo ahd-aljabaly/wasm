@@ -1,5 +1,4 @@
-FROM php:8.3-fpm
-
+FROM php:8.4-fpm
 # تثبيت إضافات النظام والـintl والـMySQL المطلوبة لـ Laravel و Filament
 RUN apt-get update && apt-get install -y \
     git \
