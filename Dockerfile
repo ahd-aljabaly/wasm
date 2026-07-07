@@ -1,6 +1,6 @@
 FROM php:8.4-fpm
 
-# تثبيت إضافات النظام والـintl والـMySQL المطلوبة لـ Laravel و Filament
+# تثبيت إضافات النظام والـintl والـMySQL المطلوبة لـ Laravel و Filament وتثبيت الـ Node.js والـ NPM
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,7 +10,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nginx \
-    libicu-dev
+    libicu-dev \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 # تنظيف الكاش
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -31,8 +33,11 @@ COPY . /var/www
 # نسخ ملف إعدادات nginx لتوجيه المسار لـ public
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 
-# تثبيت الحزم مع تجاهل فحص المنصة لتفادي أي خطأ توافقية
+# تثبيت حزم الـ Composer مع تجاهل فحص المنصة
 RUN composer install --no-interaction --optimize-autoloader --no-dev --ignore-platform-reqs
+
+# تثبيت حزم الـ NPM وبناء ملفات الـ Vite (هذا هو السطر السحري الجديد)
+RUN npm install && npm run build
 
 # ضبط الصلاحيات للمجلدات المهمة لـ Laravel
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
