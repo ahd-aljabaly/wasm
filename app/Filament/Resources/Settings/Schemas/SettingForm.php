@@ -108,13 +108,8 @@ class SettingForm
                             ->directory('settings/videos')
                             ->visibility('public')
                             ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/quicktime'])
-
-    // 1. رفع الحد الاحتياطي لـ 150 ميجابايت لتفادي أي قيود حظر
-                            ->maxSize(153600)
-
-    // 2. تفعيل الـ Chunking (مهم جداً لـ Filament على الـ Cloud لتجنب تعليق الرفع)
-                            ->chunkSize(1024 * 1024 * 2) // يرفع الملف كأجزاء صغيرة جداً (2 ميجا لكل جزء) لكي لا يموت السيرفر
-                            ->helperText('الصيغ المقبولة: MP4, WebM, MOV. يرجى الانتظار حتى اكتمال شريط الرفع.')
+                            ->maxSize(102400) // 100 ميجابايت واضحة وصريحة لـ Filament
+                            ->helperText('الصيغ المقبولة: MP4, WebM, MOV. الحد الأقصى 100 ميجا.')
                             ->visible(fn ($get) => $get('type') === 'video')
                             ->afterStateHydrated(function (FileUpload $component, $record) {
                                 if ($record && $record->type === 'video') {
