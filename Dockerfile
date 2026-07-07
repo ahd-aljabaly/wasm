@@ -37,8 +37,11 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev --ignore-pl
 # ضبط الصلاحيات للمجلدات المهمة لـ Laravel
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
+# إعطاء صلاحيات التشغيل لسكربت الإقلاع
+RUN chmod +x /var/www/entrypoint.sh
+
 # تجهيز خادم الويب والمنافذ
 EXPOSE 80
 
-# أمر تشغيل السيرفر الصافي والنظيف
-CMD service nginx start && php-fpm
+# تشغيل السكربت كأمر إقلاع أساسي وجذري
+CMD ["/var/www/entrypoint.sh"]
