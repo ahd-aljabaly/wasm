@@ -1,4 +1,5 @@
 FROM php:8.4-fpm
+
 # تثبيت إضافات النظام والـintl والـMySQL المطلوبة لـ Laravel و Filament
 RUN apt-get update && apt-get install -y \
     git \
@@ -27,6 +28,9 @@ WORKDIR /var/www
 # نسخ ملفات المشروع بالكامل
 COPY . /var/www
 
+# نسخ ملف إعدادات nginx الذي قمنا بإنشائه داخل مجلد docker إلى السيرفر لتوجيه المسار لـ public
+COPY docker/nginx.conf /etc/nginx/sites-available/default
+
 # تثبيت الحزم مع تجاهل فحص المنصة لتفادي أي خطأ توافقية نهائياً
 RUN composer install --no-interaction --optimize-autoloader --no-dev --ignore-platform-reqs
 
@@ -36,5 +40,5 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # تجهيز خادم الويب والمنافذ
 EXPOSE 80
 
-# أمر تشغيل السيرفر
+# أمر تشغيل السيرفر وتفعيل الـ fpm مع Nginx معاً
 CMD service nginx start && php-fpm
