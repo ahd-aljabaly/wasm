@@ -6,14 +6,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @php
-        // دالة لمعالجة النصوص المشفرة Hexadecimal القادمة من الـ Tinker وتحويلها لعربية سليمة
-        function decodeTinkerText($text) {
-            if (empty($text)) return '';
-            if (preg_index('/<[0-9A-Fa-f]{2}>/', $text)) {
-                $hex = preg_replace('/<([0-9A-Fa-f]{2})>/', '$1', $text);
-                return hex2bin($hex);
+        // دالة مصححة لمعالجة النصوص المشفرة القادمة من قاعدة البيانات
+        if (!function_exists('decodeTinkerText')) {
+            function decodeTinkerText($text) {
+                if (empty($text)) return '';
+                if (preg_match('/<[0-9A-Fa-f]{2}>/', $text)) {
+                    $hex = preg_replace('/<([0-9A-Fa-f]{2})>/', '$1', $text);
+                    return hex2bin($hex);
+                }
+                return $text;
             }
-            return $text;
         }
 
         $logoValHead = $settings['logo'] ?? null;
@@ -575,7 +577,6 @@
             <div class="flex flex-wrap gap-2.5 justify-center">
                 @foreach($settings as $key => $url)
                     @php
-                        // دعم قراءة المفاتيح سواء كانت تنتهي بـ _url أو كانت اسم المنصة مباشرة في قاعدة البيانات
                         $platform = str_replace('_url', '', $key);
                         $isSocial = in_array($platform, ['facebook', 'instagram', 'linkedin', 'twitter', 'x', 'tiktok', 'youtube', 'behance', 'pinterest', 'whatsapp', 'messenger']);
                     @endphp
