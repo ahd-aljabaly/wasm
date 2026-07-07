@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 # تنظيف الكاش
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# تثبيت إضافات PHP المخصصة وتفعيل intl بالكامل لتخطي المشكلة السابقة
+# تثبيت إضافات PHP المخصصة وتفعيل intl بالكامل
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl
 
@@ -28,10 +28,10 @@ WORKDIR /var/www
 # نسخ ملفات المشروع بالكامل
 COPY . /var/www
 
-# نسخ ملف إعدادات nginx الذي قمنا بإنشائه داخل مجلد docker إلى السيرفر لتوجيه المسار لـ public
+# نسخ ملف إعدادات nginx لتوجيه المسار لـ public
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 
-# تثبيت الحزم مع تجاهل فحص المنصة لتفادي أي خطأ توافقية نهائياً
+# تثبيت الحزم مع تجاهل فحص المنصة لتفادي أي خطأ توافقية
 RUN composer install --no-interaction --optimize-autoloader --no-dev --ignore-platform-reqs
 
 # ضبط الصلاحيات للمجلدات المهمة لـ Laravel
