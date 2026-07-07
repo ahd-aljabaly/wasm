@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Settings\Schemas;
 
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -108,8 +108,13 @@ class SettingForm
                             ->directory('settings/videos')
                             ->visibility('public')
                             ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/quicktime'])
-                            ->maxSize(51200)
-                            ->helperText('الحد الأقصى لحجم الملف 50 ميجابايت. الصيغ المقبولة: MP4, WebM, MOV')
+
+    // 1. رفع الحد الاحتياطي لـ 150 ميجابايت لتفادي أي قيود حظر
+                            ->maxSize(153600)
+
+    // 2. تفعيل الـ Chunking (مهم جداً لـ Filament على الـ Cloud لتجنب تعليق الرفع)
+                            ->chunkSize(1024 * 1024 * 2) // يرفع الملف كأجزاء صغيرة جداً (2 ميجا لكل جزء) لكي لا يموت السيرفر
+                            ->helperText('الصيغ المقبولة: MP4, WebM, MOV. يرجى الانتظار حتى اكتمال شريط الرفع.')
                             ->visible(fn ($get) => $get('type') === 'video')
                             ->afterStateHydrated(function (FileUpload $component, $record) {
                                 if ($record && $record->type === 'video') {
