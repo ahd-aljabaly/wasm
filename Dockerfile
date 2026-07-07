@@ -40,5 +40,5 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # تجهيز خادم الويب والمنافذ
 EXPOSE 80
 
-# الحل الجذري: أمر تشغيل الهجرة وتغذية قاعدة البيانات تلقائياً ثم تشغيل السيرفر
-CMD php artisan migrate --force && php artisan db:seed --force && service nginx start && php-fpm
+# أمر تشغيل السيرفر الصافي والنظيف
+CMD service nginx start && php-fpm
