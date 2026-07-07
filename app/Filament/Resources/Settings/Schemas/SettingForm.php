@@ -6,14 +6,14 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
+use Filament\Forms\Components\Section; // تم تصحيح المسار هنا
+use Filament\Forms\Form; // تم تصحيح المسار هنا بدلاً من Schema
 
 class SettingForm
 {
-    public static function configure(Schema $schema): Schema
+    public static function configure(Form $form): Form // تم تعديلها لتستقبل Form
     {
-        return $schema
+        return $form
             ->components([
                 Section::make('بيانات الإعداد')
                     ->columns(2)
@@ -59,11 +59,6 @@ class SettingForm
                             ->default('text')
                             ->columnSpanFull(),
 
-                        // كل حقل قيمة له اسم state مستقل (value_text, value_textarea...) بدل
-                        // تشارك الأربعة بنفس اسم "value" - هذا كان سبب فضاء الفورم وقت Edit.
-                        // afterStateHydrated بيقرأ القيمة الحقيقية من السجل عند فتح صفحة التعديل،
-                        // dehydrateStateUsing بيحدد شو فعلياً يروح لعمود value وقت الحفظ.
-
                         TextInput::make('value_text')
                             ->label('القيمة')
                             ->visible(fn ($get) => in_array($get('type'), ['text', 'url']))
@@ -108,7 +103,7 @@ class SettingForm
                             ->directory('settings/videos')
                             ->visibility('public')
                             ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/quicktime'])
-                            ->maxSize(102400) // 100 ميجابايت واضحة وصريحة لـ Filament
+                            ->maxSize(102400) // 100 ميجابايت صريحة
                             ->helperText('الصيغ المقبولة: MP4, WebM, MOV. الحد الأقصى 100 ميجا.')
                             ->visible(fn ($get) => $get('type') === 'video')
                             ->afterStateHydrated(function (FileUpload $component, $record) {
