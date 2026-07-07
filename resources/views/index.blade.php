@@ -6,11 +6,22 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @php
+        // دالة لمعالجة النصوص المشفرة Hexadecimal القادمة من الـ Tinker وتحويلها لعربية سليمة
+        function decodeTinkerText($text) {
+            if (empty($text)) return '';
+            if (preg_index('/<[0-9A-Fa-f]{2}>/', $text)) {
+                $hex = preg_replace('/<([0-9A-Fa-f]{2})>/', '$1', $text);
+                return hex2bin($hex);
+            }
+            return $text;
+        }
+
         $logoValHead = $settings['logo'] ?? null;
         $logoUrlHead = !empty($logoValHead)
             ? ((str_starts_with($logoValHead, 'http') || str_starts_with($logoValHead, '/')) ? $logoValHead : asset('storage/' . $logoValHead))
             : asset('images/logo.svg');
-        $siteNameHead = $settings['site_name'] ?? 'Wasm Media';
+
+        $siteNameHead = decodeTinkerText($settings['site_name'] ?? 'Wasm Media');
         $siteDesc = 'وكالة وسم ميديا الإبداعية: هوية بصرية، تسويق رقمي، صناعة محتوى، وحلول التغليف والطباعة الفاخرة.';
         $ogImage = $logoUrlHead;
     @endphp
@@ -53,7 +64,7 @@
     @php
         $jsonSocialLinks = [];
         foreach ($settings as $k => $v) {
-            if (str_ends_with($k, '_url') && !empty($v) && filter_var($v, FILTER_VALIDATE_URL)) {
+            if ((str_ends_with($k, '_url') || in_array($k, ['facebook', 'instagram', 'twitter', 'linkedin', 'tiktok', 'youtube'])) && !empty($v)) {
                 $jsonSocialLinks[] = e($v);
             }
         }
@@ -141,7 +152,7 @@
     <div class="max-w-[1240px] mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
 
         <div class="lg:col-span-6 text-right flex flex-col justify-center items-start">
-            
+
             <div class="reveal inline-flex items-center gap-2 bg-white/5 border border-[#C5A24A]/35 backdrop-blur-md text-[#EAD08B] px-4 py-2 rounded-full text-xs font-medium mb-6 shadow-sm">
                 <span class="w-2 h-2 rounded-full bg-[#C5A24A] animate-ping"></span>
                 <span>نصنع الأثر ونبني الهوية</span>
@@ -149,14 +160,14 @@
 
             <h1 class="reveal text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-[1.3] font-bold tracking-wide">
                 @if(!empty($settings['hero_title']))
-                    {!! $settings['hero_title'] !!}
+                    {!! decodeTinkerText($settings['hero_title']) !!}
                 @else
                     نصمم هوية <span class="text-gradient-gold font-bold">تترك أثراً</span> ونبني حضوراً يُلاحَظ
                 @endif
             </h1>
 
             <p class="reveal text-sm md:text-base text-slate-200/90 mb-8 max-w-xl font-normal leading-loose">
-               {{ $settings['hero_subtitle'] ?? '' }}
+               {{ decodeTinkerText($settings['hero_subtitle'] ?? '') }}
             </p>
 
             <div class="reveal flex flex-col sm:flex-row gap-4 w-full sm:w-auto" style="transition-delay: 200ms;">
@@ -193,7 +204,7 @@
                         </div>
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0B1633]/50 via-transparent to-transparent pointer-events-none"></div>
-                        
+
                         <div class="absolute bottom-4 right-4 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 z-20">
                             @if($logoUrl)
                                 <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-5 w-auto brightness-0 invert">
@@ -208,17 +219,6 @@
     </div>
 
 </section>
-
-{{-- <div id="videoModal" class="fixed inset-0 bg-black/90 z-[100] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
-    <button onclick="closeVideoModal()" class="absolute top-6 left-6 text-white hover:text-[#C5A24A] bg-white/10 p-3 rounded-full transition-colors">
-        <span class="material-symbols-outlined text-2xl">close</span>
-    </button>
-    <div class="w-full max-w-4xl aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black">
-        <video id="modalVideo" class="w-full h-full object-contain" controls>
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-logo-reveal-41662-large.mp4" type="video/mp4">
-        </video>
-    </div>
-</div> --}}
 
 <section class="py-10 bg-[#F9F9F6] relative z-20" id="statistics">
     <div class="max-w-[1000px] mx-auto px-6">
@@ -276,9 +276,6 @@
                     نحن لا نبيع خدمات، بل <span class="text-[#C5A24A]">نصنع حلول نمو</span> متكاملة ومترابطة
                 </h2>
             </div>
-            {{-- <p class="text-slate-500 text-xs md:text-sm leading-relaxed font-medium max-w-xs md:text-left">
-                منظومة عمل مرنة وواضحة تضمن لك تدفقاً يسيراً للمعلومات بأعلى جودة.
-            </p> --}}
         </div>
 
         @if(!empty($services) && $services->count())
@@ -326,9 +323,8 @@
 <section class="py-20 md:py-24 bg-white border-t border-slate-100" id="portfolio">
     <div class="max-w-[1240px] mx-auto px-6">
 
-        <!-- رأس القسم وأزرار الفلترة الديناميكية -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 mb-12 border-b border-slate-100 reveal">
-    
+
     <div class="max-w-xl">
         <h2 class="text-2xl md:text-3xl text-[#172E66] mb-2 font-black tracking-tight">معرض أعمالنا الاستراتيجية</h2>
         <p class="text-slate-500 text-xs md:text-sm leading-relaxed">تصفح كيف ساعدنا شركاءنا على تحويل أهدافهم لقصص نجاح واقعية ومبهرة.</p>
@@ -338,10 +334,10 @@
     <button id="btn-filter-all" class="filter-btn text-xs font-bold px-4 py-1.5 rounded-lg transition-all cursor-pointer bg-[#172E66] text-white shadow-sm" onclick="filterPortfolio('all', this)">
         الكل
     </button>
-    
+
     @if(!empty($services))
         @foreach($services as $service)
-            <button class="filter-btn text-xs font-bold px-4 py-1.5 rounded-lg transition-all cursor-pointer text-slate-600 hover:text-[#172E66] hover:bg-white/50" 
+            <button class="filter-btn text-xs font-bold px-4 py-1.5 rounded-lg transition-all cursor-pointer text-slate-600 hover:text-[#172E66] hover:bg-white/50"
                     onclick="filterPortfolio('{{ trim($service->slug) }}', this)">
                 {{ $service->title }}
             </button>
@@ -351,7 +347,6 @@
 
 </div>
 
-        <!-- شبكة المشاريع المحمية بالـ data-category -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
     @forelse($projects as $project)
         <a href="{{ route('projects.show', $project->slug) }}"
@@ -447,13 +442,11 @@
 </section>
 
 <section class="py-20 md:py-24 bg-surface-container-low relative overflow-hidden" id="contact">
-    <!-- خلفية جمالية مدمجة بشكل آمن -->
     <div class="absolute top-1/2 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl z-0 pointer-events-none"></div>
 
     <div class="max-w-[1240px] mx-auto px-6 relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
-            <!-- القسم الأيمن: معلومات التواصل -->
             <div class="lg:col-span-5 reveal">
                 <div class="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-xs font-bold mb-4">
                     <span class="material-symbols-outlined text-sm">hub</span>
@@ -465,7 +458,6 @@
                 </p>
 
                 <div class="space-y-4 max-w-sm">
-                    <!-- البريد الإلكتروني -->
                     <div class="flex items-center gap-4 p-4 rounded-xl bg-white/50 border border-white/40 backdrop-blur-sm">
                         <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center flex-shrink-0">
                             <span class="material-symbols-outlined text-lg">mail</span>
@@ -475,7 +467,6 @@
                             <p class="text-sm font-extrabold text-primary">{{ $settings['contact_email'] ?? 'hello@wasmmedia.com' }}</p>
                         </div>
                     </div>
-                    <!-- رقم الجوال -->
                     <div class="flex items-center gap-4 p-4 rounded-xl bg-white/50 border border-white/40 backdrop-blur-sm">
                         <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center flex-shrink-0">
                             <span class="material-symbols-outlined text-lg">call</span>
@@ -488,7 +479,6 @@
                 </div>
             </div>
 
-            <!-- القسم الأيسر: فورم نموذج الاتصال -->
             <div class="lg:col-span-7 reveal" style="transition-delay: 150ms;">
                 <div class="glass-card p-6 md:p-10 rounded-2xl shadow-xl border border-white/60">
                     <div id="formWrap">
@@ -496,7 +486,7 @@
                         <p class="text-[11px] text-on-surface-variant mb-6 font-medium">احصل على تحليل أولي لعلامتك التجارية خلال 24 ساعة فقط.</p>
 
                         <form id="contactForm" class="space-y-5" novalidate>
-                            @csrf <!-- يفضل وجودها دائماً في فورامات Laravel حتى لو تم إرسالها عبر Ajax -->
+                            @csrf
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -528,7 +518,6 @@
                                 <select id="f-service" name="service" class="w-full bg-white/90 border border-primary/10 focus:border-primary focus:ring-0 rounded-xl px-4 py-3 text-xs md:text-sm transition-all text-on-surface-variant">
                                     <option value="">اختر الخدمة المطلوبة</option>
 
-                                    <!-- استخدام forelse الاحترافي لتنظيف الهيكل في Blade -->
                                     @forelse($services as $service)
                                         <option value="{{ $service->slug }}">{{ $service->title }}</option>
                                     @empty
@@ -554,7 +543,6 @@
                         </form>
                     </div>
 
-                    <!-- صندوق النجاح (تأكد من إخفائه افتراضياً بـ hidden في كود الـ CSS أو الـ Tailwind لتتحكم به عبر الـ JS) -->
                     <div class="form-success-box hidden text-center py-6" id="formSuccess">
                         <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                             <span class="material-symbols-outlined text-green-700 text-2xl">check</span>
@@ -586,9 +574,13 @@
 
             <div class="flex flex-wrap gap-2.5 justify-center">
                 @foreach($settings as $key => $url)
-                    @if(str_ends_with($key, '_url') && !empty($url))
-                        @php $platform = str_replace('_url', '', $key); @endphp
+                    @php
+                        // دعم قراءة المفاتيح سواء كانت تنتهي بـ _url أو كانت اسم المنصة مباشرة في قاعدة البيانات
+                        $platform = str_replace('_url', '', $key);
+                        $isSocial = in_array($platform, ['facebook', 'instagram', 'linkedin', 'twitter', 'x', 'tiktok', 'youtube', 'behance', 'pinterest', 'whatsapp', 'messenger']);
+                    @endphp
 
+                    @if($isSocial && !empty($url))
                         <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" title="{{ ucfirst($platform) }}"
                            class="w-8 h-8 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 transition-all duration-300 hover:bg-slate-800 hover:text-white"
                            data-platform="{{ $platform }}">
@@ -624,9 +616,9 @@
         </div>
 
         <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-5 text-[11px] text-slate-500">
-            <p class="font-medium text-center sm:text-right">{{ $settings['copyright'] ?? 'جميع الحقوق محفوظة © وسم ميديا' }}</p>
+            <p class="font-medium text-center sm:text-right">{{ decodeTinkerText($settings['copyright'] ?? 'جميع الحقوق محفوظة © وسم ميديا') }}</p>
             @if(!empty($settings['footer_text']))
-                <p class="text-slate-400/80 text-center sm:text-left max-w-md">{{ $settings['footer_text'] }}</p>
+                <p class="text-slate-400/80 text-center sm:text-left max-w-md">{{ decodeTinkerText($settings['footer_text']) }}</p>
             @endif
         </div>
 
@@ -634,34 +626,26 @@
 </footer>
 
 <script>
-  // دالة الفلترة الذكية مع تحديد حد أقصى (3 مشاريع فقط) لأي قسم أو للكل
 function filterPortfolio(category, button) {
-    // 1. إدارة كلاسات التحديد للأزرار (تلوين الزر النشط وإعادة البقية للرمادي)
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('bg-[#172E66]', 'text-white', 'shadow-sm');
         btn.classList.add('text-slate-600', 'hover:text-[#172E66]');
     });
-    
+
     button.classList.add('bg-[#172E66]', 'text-white', 'shadow-sm');
     button.classList.remove('text-slate-600', 'hover:text-[#172E66]');
 
-    // عداد لحساب عدد المشاريع التي تم إظهارها حالياً
     let shownCount = 0;
 
-    // 2. الفلترة الآمنة والالتزام بـ 3 مشاريع كحد أقصى للـ "الكل" أو "الأقسام"
     document.querySelectorAll('.portfolio-item').forEach(item => {
         const itemCategory = item.getAttribute('data-category');
-        
-        // هل العنصر يطابق الفئة المحددة؟
         const isMatch = (category === 'all' || itemCategory === category);
 
-        // إذا كان متطابقاً ولم نتجاوز 3 مشاريع، نقوم بإظهاره
         if (isMatch && shownCount < 3) {
             item.style.display = 'block';
             setTimeout(() => item.style.opacity = '1', 50);
-            shownCount++; // زيادة العداد
+            shownCount++;
         } else {
-            // إخفاء بقية المشاريع الزائدة عن 3
             item.style.opacity = '0';
             item.style.display = 'none';
         }
@@ -792,7 +776,6 @@ function filterPortfolio(category, button) {
         });
     }
 
-    // تشغيل الفلترة تلقائياً عند تحميل الصفحة ليعرض أحدث 3 مشاريع فقط في البداية
 document.addEventListener('DOMContentLoaded', () => {
     const allBtn = document.getElementById('btn-filter-all');
     if (allBtn) {
