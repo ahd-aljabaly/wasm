@@ -1,5 +1,10 @@
 <?php
 
+// أسطر التصفير الجذري - أضفها هنا مؤقتاً
+if (function_exists('opcache_reset')) { opcache_reset(); }
+clearstatcache();
+\Illuminate\Support\Facades\Artisan::call('optimize:clear');
+
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
