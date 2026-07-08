@@ -1,9 +1,6 @@
 <?php
-
-// أسطر التصفير الجذري - أضفها هنا مؤقتاً
-if (function_exists('opcache_reset')) { opcache_reset(); }
+if (function_exists('opcache_reset')) { @opcache_reset(); }
 clearstatcache();
-\Illuminate\Support\Facades\Artisan::call('optimize:clear');
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -23,3 +20,5 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $app->handleRequest(Request::capture());
+
+\Illuminate\Support\Facades\Artisan::call('optimize:clear');
