@@ -6,14 +6,14 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Section; // تم تصحيح المسار هنا
-use Filament\Forms\Form; // تم تصحيح المسار هنا بدلاً من Schema
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
 class SettingForm
 {
-    public static function configure(Form $form): Form // تم تعديلها لتستقبل Form
+    public static function configure(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->components([
                 Section::make('بيانات الإعداد')
                     ->columns(2)
@@ -53,8 +53,8 @@ class SettingForm
                                 'text' => 'نص قصير',
                                 'textarea' => 'نص طويل',
                                 'url' => 'رابط',
-                                'image' => 'صورة',
-                                'video' => 'فيديو',
+                                'image' => 'صورة فردية',
+                                'gallery' => 'معرض صور متحرك',
                             ])
                             ->default('text')
                             ->columnSpanFull(),
@@ -67,6 +67,7 @@ class SettingForm
                                     $component->state($record->value);
                                 }
                             })
+                            ->dehydrated(fn ($get) => in_array($get('type'), ['text', 'url']))
                             ->dehydrateStateUsing(fn ($state) => $state)
                             ->columnSpanFull(),
 
@@ -79,6 +80,7 @@ class SettingForm
                                     $component->state($record->value);
                                 }
                             })
+                            ->dehydrated(fn ($get) => $get('type') === 'textarea')
                             ->dehydrateStateUsing(fn ($state) => $state)
                             ->columnSpanFull(),
 
@@ -94,24 +96,33 @@ class SettingForm
                                     $component->state($record->value ? [$record->value] : []);
                                 }
                             })
+                            ->dehydrated(fn ($get) => $get('type') === 'image')
                             ->dehydrateStateUsing(fn ($state) => is_array($state) ? (reset($state) ?: null) : $state)
                             ->columnSpanFull(),
 
-                        FileUpload::make('value_video')
-                            ->label('الفيديو')
+                        FileUpload::make('value_gallery')
+                            ->label('صور المعرض المتحرك')
+                            ->image()
+                            ->multiple()
+                            ->reorderable()
                             ->disk('public')
-                            ->directory('settings/videos')
+                            ->directory('settings/gallery')
                             ->visibility('public')
-                            ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/quicktime'])
-                            ->maxSize(102400) // 100 ميجابايت صريحة
-                            ->helperText('الصيغ المقبولة: MP4, WebM, MOV. الحد الأقصى 100 ميجا.')
-                            ->visible(fn ($get) => $get('type') === 'video')
+                            ->maxSize(10240)
+                            ->helperText('يمكنك رفع عدة صور عصرية لأعمالكم لتتحرك تلقائياً في الواجهة.')
+                            ->visible(fn ($get) => $get('type') === 'gallery')
                             ->afterStateHydrated(function (FileUpload $component, $record) {
-                                if ($record && $record->type === 'video') {
-                                    $component->state($record->value ? [$record->value] : []);
+                                if ($record && $record->type === 'gallery') {
+                                    $value = $record->value;
+                                    if (is_string($value) && !empty($value)) {
+                                        $decoded = json_decode($value, true);
+                                        $component->state(is_array($decoded) ? $decoded : []);
+                                    } else {
+                                        $component->state([]);
+                                    }
                                 }
                             })
-                            ->dehydrateStateUsing(fn ($state) => is_array($state) ? (reset($state) ?: null) : $state)
+                            ->dehydrated(fn ($get) => $get('type') === 'gallery')
                             ->columnSpanFull(),
                     ]),
             ])

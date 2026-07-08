@@ -134,7 +134,7 @@ body {
 
 @font-face {
     font-family: 'Shubbak';
-    src: url('../fonts/Shubbak-Medium.otf') format('opentype');
+    src: url('/fonts/Shubbak-Medium.otf') format('opentype');
     font-weight: 500;
     font-style: normal;
     font-display: swap;

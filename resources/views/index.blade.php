@@ -21,7 +21,7 @@
         $logoValHead = $settings['logo'] ?? null;
         $logoUrlHead = !empty($logoValHead)
             ? ((str_starts_with($logoValHead, 'http') || str_starts_with($logoValHead, '/')) ? $logoValHead : asset('storage/' . $logoValHead))
-            : asset('images/logo.svg');
+            : null;
 
         $siteNameHead = decodeTinkerText($settings['site_name'] ?? 'Wasm Media');
         $siteDesc = 'وكالة وسم ميديا الإبداعية: هوية بصرية، تسويق رقمي، صناعة محتوى، وحلول التغليف والطباعة الفاخرة.';
@@ -118,6 +118,10 @@
             <a href="#contact" class="hidden sm:inline-flex bg-[#172E66] text-white text-xs md:text-sm font-bold px-6 py-3 rounded-xl hover:bg-[#0B1633] transition-all shadow-md shadow-blue-900/10">
                 اتصل بنا
             </a>
+             @if(auth()->check() || \Filament\Facades\Filament::auth()->check())
+    <a href="{{ url('/admin') }}"class="hidden sm:inline-flex bg-[#172E66] text-white text-xs md:text-sm font-bold px-6 py-3 rounded-xl hover:bg-[#0B1633] transition-all shadow-md shadow-blue-900/10">لوحة التحكم 
+    </a>
+@endif
             <button id="menuToggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg text-[#172E66]" aria-label="فتح القائمة">
                 <span class="material-symbols-outlined text-2xl" id="menuIcon">menu</span>
             </button>
@@ -130,138 +134,214 @@
             <a class="text-[#172E66]" href="#portfolio">أعمالنا</a>
             <a class="text-[#172E66]" href="#process">منهجيتنا</a>
             <a href="#contact" class="bg-[#172E66] text-white text-sm font-bold px-6 py-3 rounded-xl text-center mt-2">اتصل بنا</a>
+            
         </nav>
     </div>
 </header>
 
 <main class="pt-20">
 
-<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-24 bg-gradient-to-br from-[#0B1633] via-[#12234E] to-[#0B1633]">
+<!-- تصميم الهيرو المتكامل - مع دمج الإحصائيات الحية Dynamic Stats وتدرج إذابة الحواف -->
+<section id="home" class="relative min-h-screen w-full flex flex-col lg:flex-row items-stretch overflow-hidden bg-[#F0F5FA]">
 
-    <div class="absolute inset-0 w-full h-full opacity-65 mix-blend-screen lines-layer-dark pointer-events-none"></div>
+    <!-- الجانب الأول: النصف النصي المطور -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center px-6 sm:px-12 lg:px-24 py-20 relative z-20 bg-gradient-to-br from-[#FFFFFF] to-[#F0F5FA]">
+        
+        <!-- توهج خفيف يضفي لمسة حيوية عصرية خلف النص -->
+        <div class="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-[#C5A24A]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-    <div class="absolute top-0 left-0 w-[500px] md:w-[700px] h-[500px] md:h-[700px] bg-[#C5A24A]/10 rounded-full blur-[130px] animate-pulse-slow -z-10"></div>
-    <div class="absolute bottom-0 right-0 w-[450px] md:w-[650px] h-[450px] md:h-[650px] bg-[#3B5AA0]/20 rounded-full blur-[120px] animate-pulse-slow-reverse -z-10"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C5A24A]/5 rounded-full blur-[150px] -z-10"></div>
+        <div class="max-w-xl w-full text-right flex flex-col items-start relative z-10 min-h-[80vh] justify-between gap-12">
+            
+            <!-- الجزء العلوي: النصوص والأزرار -->
+            <div class="w-full flex flex-col items-start">
+                <!-- الشارة العلوية -->
+                <div class="inline-flex items-center gap-2.5 bg-white/80 border border-blue-100 text-[#B38F37] px-4 py-1.5 rounded-full text-[11px] font-bold mb-8 shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#C5A24A]"></span>
+                    <span>استوديو وسم الإبداعي</span>
+                </div>
 
-    <div class="absolute inset-0 -z-10 overflow-hidden">
-        <span class="particle particle-1"></span>
-        <span class="particle particle-2"></span>
-        <span class="particle particle-3"></span>
-        <span class="particle particle-4"></span>
-    </div>
+                <!-- العنوان الرئيسي -->
+                <h1 class="text-4xl sm:text-5xl lg:text-[54px] text-slate-900 font-black leading-[1.3] mb-6 tracking-tight">
+                    @if(!empty($settings['hero_title']))
+                        {!! decodeTinkerText($settings['hero_title']) !!}
+                    @else
+                        نصمم هوية <br>
+                        <span class="bg-gradient-to-r from-[#B38F37] to-[#C5A24A] bg-clip-text text-transparent">تترك أثراً</span> <br>
+                        ونبني حضوراً يُلاحَظ
+                    @endif
+                </h1>
 
-    <div class="max-w-[1240px] mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+                <!-- الوصف الفرعي -->
+                <p class="text-slate-600 text-base md:text-[17px] leading-[1.8] mb-10 font-normal max-w-lg">
+                   {{ decodeTinkerText($settings['hero_subtitle'] ?? '') }}
+                </p>
 
-        <div class="lg:col-span-6 text-right flex flex-col justify-center items-start">
-
-            <div class="reveal inline-flex items-center gap-2 bg-white/5 border border-[#C5A24A]/35 backdrop-blur-md text-[#EAD08B] px-4 py-2 rounded-full text-xs font-medium mb-6 shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-[#C5A24A] animate-ping"></span>
-                <span>نصنع الأثر ونبني الهوية</span>
-            </div>
-
-            <h1 class="reveal text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-[1.3] font-bold tracking-wide">
-                @if(!empty($settings['hero_title']))
-                    {!! decodeTinkerText($settings['hero_title']) !!}
-                @else
-                    نصمم هوية <span class="text-gradient-gold font-bold">تترك أثراً</span> ونبني حضوراً يُلاحَظ
-                @endif
-            </h1>
-
-            <p class="reveal text-sm md:text-base text-slate-200/90 mb-8 max-w-xl font-normal leading-loose">
-               {{ decodeTinkerText($settings['hero_subtitle'] ?? '') }}
-            </p>
-
-            <div class="reveal flex flex-col sm:flex-row gap-4 w-full sm:w-auto" style="transition-delay: 200ms;">
-                <a href="#contact" class="bg-[#C5A24A] text-[#0B1633] text-xs md:text-sm font-bold px-8 py-4 rounded-xl hover:bg-[#EAD08B] transition-all shadow-lg shadow-black/20 text-center min-w-[180px]">
-                    اطلب استشارة مجانية
-                </a>
-                <a href="#portfolio" class="bg-white/5 border border-white/20 backdrop-blur-md text-white text-xs md:text-sm font-bold px-8 py-4 rounded-xl hover:bg-white/10 transition-all text-center min-w-[180px]">
-                    استكشف أعمالنا
-                </a>
-            </div>
-
-        </div>
-
-        <div class="lg:col-span-6 w-full reveal" style="transition-delay: 150ms;">
-            <div class="relative">
-                <div class="absolute -inset-1 bg-gradient-to-r from-[#C5A24A]/30 to-[#3B5AA0]/30 rounded-3xl blur-xl opacity-60 animate-pulse-slow"></div>
-
-                <div class="glass-video-card-dark p-3 md:p-4 rounded-3xl relative shadow-2xl border border-white/10 max-w-xl mx-auto lg:mr-auto lg:ml-0 group">
-                    <div class="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-inner bg-[#0B1633]">
-                        @if($videoUrl)
-                        <video class="w-full h-full object-cover opacity-100 scale-100 group-hover:scale-105 transition-transform duration-1000"
-                               autoplay loop muted playsinline
-                               oncanplay="this.play()" onloadedmetadata="this.muted = true">
-                            <source src="{{ $videoUrl }}" type="video/mp4">
-                        </video>
-                        @else
-                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0B1633] via-[#172E66] to-[#0B1633] relative overflow-hidden">
-                            <div class="absolute inset-0 lines-layer-dark opacity-40"></div>
-                            @if($logoUrl)
-                                 <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-14 w-auto brightness-0 invert opacity-95 relative z-10 floating-logo">
-                            @else
-                                 <span class="text-2xl font-bold text-white/90 tracking-tight relative z-10">{{ $siteName }}</span>
-                            @endif
-                        </div>
-                        @endif
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0B1633]/50 via-transparent to-transparent pointer-events-none"></div>
-
-                        <div class="absolute bottom-4 right-4 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 z-20">
-                            @if($logoUrl)
-                                <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-5 w-auto brightness-0 invert">
-                            @else
-                                <span class="text-xs font-bold text-white">{{ $siteName }}</span>
-                            @endif
-                        </div>
-                    </div>
+                <!-- الأزرار -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                    <a href="#contact" class="inline-flex items-center justify-center bg-[#C5A24A] text-white text-sm font-bold px-9 py-4 rounded-xl hover:bg-[#B38F37] hover:-translate-y-0.5 transition-all duration-300 shadow-md shadow-[#C5A24A]/20 text-center min-w-[195px] w-full sm:w-auto">
+                        اطلب استشارة مجانية
+                    </a>
+                    <a href="#portfolio" class="inline-flex items-center justify-center bg-white border border-blue-100 text-slate-700 text-sm font-semibold px-9 py-4 rounded-xl hover:bg-blue-50/50 hover:-translate-y-0.5 transition-all duration-300 text-center min-w-[195px] w-full sm:w-auto shadow-sm">
+                        استكشف أعمالنا
+                    </a>
                 </div>
             </div>
+
+            <!-- الجزء السفلي: دمج قسم الإحصائيات الخاص بك بشكل متناسق وموزون هندسياً -->
+            <div class="w-full border-t border-slate-200/60 pt-8 mt-auto">
+                @if(!empty($stats) && $stats->count())
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-right">
+                        @foreach($stats as $stat)
+                            @php $delay = $loop->iteration * 75 - 75; @endphp
+                            <div class="reveal transition-all duration-300 hover:-translate-y-0.5" style="transition-delay: {{ $delay }}ms;">
+                                <!-- تم ضبط تباين اللون هنا ليناسب المظهر المشرق الجديد بدلاً من الكحلي القديم -->
+                                <h3 class="text-2xl md:text-3xl text-slate-900 font-black tracking-tight mb-1 leading-none">
+                                    {{ $stat->value }}
+                                </h3>
+                                <div class="flex items-center gap-1.5 text-slate-500">
+                                    @if(!empty($stat->icon))
+                                        <span class="material-symbols-outlined text-xs text-[#C5A24A]" style="font-variation-settings: 'FILL' 1;">{{ $stat->icon }}</span>
+                                    @endif
+                                    <p class="text-xs font-bold tracking-wide text-slate-400">
+                                        {{ $stat->label }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <!-- الحالة الاحتياطية المنسقة -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-right">
+                        <div class="reveal">
+                            <h3 class="text-2xl md:text-3xl text-slate-900 font-black tracking-tight mb-1 leading-none">120+</h3>
+                            <div class="flex items-center gap-1.5 text-slate-400">
+                                <span class="material-symbols-outlined text-xs text-[#C5A24A]" style="font-variation-settings: 'FILL' 1;">groups</span>
+                                <p class="text-xs font-bold text-slate-400">عميل سعيد</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
         </div>
     </div>
 
-</section>
+    <!-- الجانب الثاني: معرض الصور المطور مع حماية برمجية ضد الاختفاء -->
+    <div class="w-full lg:w-1/2 relative min-h-[450px] lg:min-h-screen z-10 overflow-hidden bg-[#E2E8F0]">
+        
+        @php
+            $galleryImages = [];
+            if(!empty($settings['hero_gallery'])) {
+                // محاولة فك التشفير بأمان
+                $decoded = is_string($settings['hero_gallery']) ? json_decode($settings['hero_gallery'], true) : $settings['hero_gallery'];
+                $galleryImages = is_array($decoded) ? array_values(array_filter($decoded)) : []; // تنظيف المصفوفة من القيم الفارغة
+            }
+        @endphp
 
-<section class="py-10 bg-[#F9F9F6] relative z-20" id="statistics">
-    <div class="max-w-[1000px] mx-auto px-6">
-
-        @if(!empty($stats) && $stats->count())
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                @foreach($stats as $stat)
-                    @php $delay = $loop->iteration * 75 - 75; @endphp
-
-                    <div class="reveal transition-all duration-300 hover:-translate-y-1" style="transition-delay: {{ $delay }}ms;">
-
-                        <h3 class="text-3xl md:text-4xl text-[#172E66] font-black tracking-tight mb-1.5 leading-none">
-                            {{ $stat->value }}
-                        </h3>
-
-                        <div class="flex items-center justify-center gap-1.5 text-slate-500">
-                            @if(!empty($stat->icon))
-                                <span class="material-symbols-outlined text-xs text-[#C5A24A]" style="font-variation-settings: 'FILL' 1;">{{ $stat->icon }}</span>
-                            @endif
-                            <p class="text-xs md:text-sm font-bold tracking-wide text-slate-400">
-                                {{ $stat->label }}
-                            </p>
+        <div id="js-hero-slider" class="absolute inset-0 w-full h-full">
+            @if(count($galleryImages) > 0)
+                @foreach($galleryImages as $index => $img)
+                    @if(!empty($img))
+                        <!-- حماية إضافية: أول صورة تأخذ opacity-100 بشكل صريح وثابت لتجنب الاختفاء -->
+                        <div class="hero-js-slide absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
+                            <img src="{{ asset('storage/' . $img) }}" alt="Wasm Showcase" class="w-full h-full object-cover" onerror="this.style.display='none';">
                         </div>
+                    @endif
+                @endforeach
+            @else
+                <!-- واجهة الأمان الاحتياطية في حال كانت المصفوفة فارغة تماماً -->
+                <div class="absolute inset-0 w-full h-full flex items-center justify-center bg-blue-100/50 z-10">
+                    @if($logoUrl)
+                        <img src="{{ $logoUrl }}" alt="{{ $siteName }}" class="h-12 w-auto opacity-30">
+                    @endif
+                </div>
+            @endif
+        </div>
 
-                    </div>
+        <!-- التدرج اللوني العملاق الذي يذيب الحد الفاصل -->
+        <div class="absolute inset-0 bg-gradient-to-r lg:bg-gradient-to-l from-[#F0F5FA] via-[#F0F5FA]/40 to-transparent z-20 pointer-events-none"></div>
+
+        <!-- خطوط المؤشرات التفاعلية التلقائية -->
+        @if(count($galleryImages) > 1)
+            <div class="absolute bottom-8 left-8 z-30 flex items-center gap-2">
+                @foreach($galleryImages as $index => $img)
+                    @if(!empty($img))
+                        <button onclick="goToSlide({{ $index }})" class="js-slide-bullet h-1.5 rounded-full bg-white/40 transition-all duration-300 {{ $index === 0 ? 'w-8 bg-white shadow-sm' : 'w-2' }}"></button>
+                    @endif
                 @endforeach
             </div>
-        @else
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <div class="reveal">
-                    <h3 class="text-3xl md:text-4xl text-[#172E66] font-black tracking-tight mb-1.5 leading-none">120+</h3>
-                    <div class="flex items-center justify-center gap-1.5 text-slate-400">
-                        <span class="material-symbols-outlined text-xs text-[#C5A24A]" style="font-variation-settings: 'FILL' 1;">groups</span>
-                        <p class="text-xs md:text-sm font-bold">عميل سعيد</p>
-                    </div>
-                </div>
-            </div>
         @endif
-
     </div>
+
+    <!-- سهم التوجيه للأسفل -->
+    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none hidden lg:block animate-bounce opacity-40">
+        <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
+    </div>
+
+    <!-- جافاسكربت المحمي كلياً من الانهيار والـ Errors -->
+    <script>
+        let currentSlide = 0;
+        let slideInterval;
+        
+        function getSlidesAndBullets() {
+            return {
+                slides: document.querySelectorAll('.hero-js-slide'),
+                bullets: document.querySelectorAll('.js-slide-bullet')
+            };
+        }
+
+        function showSlide(index) {
+            const { slides, bullets } = getSlidesAndBullets();
+            if (!slides.length || index >= slides.length || index < 0) return;
+            
+            // إخفاء الحالية بأمان
+            if (slides[currentSlide]) {
+                slides[currentSlide].classList.remove('opacity-100', 'z-10');
+                slides[currentSlide].classList.add('opacity-0', 'z-0');
+            }
+            if (bullets[currentSlide]) {
+                bullets[currentSlide].classList.remove('w-8', 'bg-white', 'shadow-sm');
+                bullets[currentSlide].classList.add('w-2', 'bg-white/40');
+            }
+
+            currentSlide = index;
+
+            // إظهار الجديدة بأمان
+            if (slides[currentSlide]) {
+                slides[currentSlide].classList.remove('opacity-0', 'z-0');
+                slides[currentSlide].classList.add('opacity-100', 'z-10');
+            }
+            if (bullets[currentSlide]) {
+                bullets[currentSlide].classList.remove('w-2', 'bg-white/40');
+                bullets[currentSlide].classList.add('w-8', 'bg-white', 'shadow-sm');
+            }
+        }
+
+        function startSlider() {
+            const { slides } = getSlidesAndBullets();
+            if (slides.length > 1) {
+                slideInterval = setInterval(() => {
+                    let nextSlide = (currentSlide + 1) % slides.length;
+                    showSlide(nextSlide);
+                }, 5000);
+            }
+        }
+
+        function goToSlide(index) {
+            clearInterval(slideInterval);
+            showSlide(index);
+            startSlider();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // تنظيف أي تداخلات سابقة وتأكيد التشغيل الآمن
+            clearInterval(slideInterval);
+            startSlider();
+        });
+    </script>
 </section>
+
+
 
 <section class="py-12 md:py-16 bg-[#F9F9F6] text-[#172E66] relative overflow-hidden" id="services">
     <div class="absolute top-0 left-1/4 w-80 h-80 bg-[#172E66]/5 rounded-full blur-[90px] pointer-events-none"></div>
