@@ -24,3 +24,7 @@ Route::get('/sitemap.xml', function () {
     return response($content, 200)->header('Content-Type', 'text/xml');
 })->name('sitemap');
 
+Route::get('/clear-everything', function() {
+    Artisan::call('optimize:clear');
+    return "تم مسح كل الكاش القديم بنجاح!";
+});
