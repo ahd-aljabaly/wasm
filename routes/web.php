@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -24,7 +25,9 @@ Route::get('/sitemap.xml', function () {
     return response($content, 200)->header('Content-Type', 'text/xml');
 })->name('sitemap');
 
+
 Route::get('/clear-everything', function() {
     Artisan::call('optimize:clear');
     return "تم مسح كل الكاش القديم بنجاح!";
 });
+
