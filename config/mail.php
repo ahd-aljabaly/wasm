@@ -9,13 +9,8 @@ return [
     'mailers' => [
 
         'brevo' => [
-            'transport' => 'smtp',
-            'host' => 'smtp-relay.brevo.com',
-            'port' => 587,
-            'encryption' => 'tls',
-            'username' => 'b1653f001@smtp-brevo.com',
-            'password' => env('BREVO_API_KEY'),
-            'timeout' => null,
+            'transport' => 'brevo+api',
+            'key' => env('BREVO_API_KEY'),
         ],
 
         'smtp' => [
