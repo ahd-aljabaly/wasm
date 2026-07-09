@@ -26,8 +26,4 @@ Route::get('/sitemap.xml', function () {
 })->name('sitemap');
 
 
-Route::get('/clear-everything', function() {
-    Artisan::call('optimize:clear');
-    return "تم مسح كل الكاش القديم بنجاح!";
-});
 

@@ -1,6 +1,4 @@
 <?php
-if (function_exists('opcache_reset')) { @opcache_reset(); }
-clearstatcache();
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -21,4 +19,3 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $app->handleRequest(Request::capture());
 
-\Illuminate\Support\Facades\Artisan::call('optimize:clear');
