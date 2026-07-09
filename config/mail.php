@@ -40,10 +40,10 @@ return [
         'brevo' => [
             'transport' => 'smtp',
             'host' => 'smtp-relay.brevo.com',
-            'port' => 587,
+            'port' => 2525,
             'encryption' => 'tls',
             'username' => env('BREVO_SMTP_USERNAME'),
-            'password' => env('BREVO_API_KEY'),
+            'password' => env('BREVO_SMTP_KEY'),
             'timeout' => 10,
         ],
 
