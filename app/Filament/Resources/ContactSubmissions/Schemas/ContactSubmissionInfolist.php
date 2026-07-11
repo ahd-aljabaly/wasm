@@ -18,10 +18,6 @@ class ContactSubmissionInfolist
                         TextEntry::make('name')
                             ->label('الاسم'),
 
-                        TextEntry::make('company')
-                            ->label('الشركة')
-                            ->placeholder('—'),
-
                         TextEntry::make('email')
                             ->label('البريد الإلكتروني')
                             ->copyable(),
@@ -29,10 +25,6 @@ class ContactSubmissionInfolist
                         TextEntry::make('phone')
                             ->label('الهاتف')
                             ->copyable(),
-
-                        TextEntry::make('service.title')
-                            ->label('الخدمة المطلوبة')
-                            ->placeholder('—'),
 
                         TextEntry::make('status')
                             ->label('الحالة')

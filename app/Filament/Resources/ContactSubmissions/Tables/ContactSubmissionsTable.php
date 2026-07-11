@@ -36,12 +36,6 @@ class ContactSubmissionsTable
                     ->label('الهاتف')
                     ->copyable(),
 
-                TextColumn::make('service.title')
-                    ->label('الخدمة')
-                    ->badge()
-                    ->color('info')
-                    ->placeholder('—'),
-
                 TextColumn::make('status')
                     ->label('الحالة')
                     ->badge()
@@ -74,10 +68,6 @@ class ContactSubmissionsTable
                         'in_progress' => 'قيد المعالجة',
                         'closed' => 'مغلق',
                     ]),
-
-                SelectFilter::make('service_id')
-                    ->label('الخدمة')
-                    ->relationship('service', 'title'),
             ])
             ->recordActions([
                 ViewAction::make(),

@@ -21,21 +21,12 @@ class ContactSubmissionForm
                             ->label('الاسم')
                             ->disabled(),
 
-                        TextInput::make('company')
-                            ->label('الشركة')
-                            ->disabled(),
-
                         TextInput::make('email')
                             ->label('البريد الإلكتروني')
                             ->disabled(),
 
                         TextInput::make('phone')
                             ->label('الهاتف')
-                            ->disabled(),
-
-                        Select::make('service_id')
-                            ->label('الخدمة المطلوبة')
-                            ->relationship('service', 'title')
                             ->disabled(),
 
                         Textarea::make('message')
