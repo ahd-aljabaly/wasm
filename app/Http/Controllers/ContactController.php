@@ -52,10 +52,7 @@ class ContactController extends Controller
 
         // إرسال إيميل إشعار للإدارة وإيميل تأكيد للعميل
 
-        $emailError = null;
-
         try {
-            // حل المشكلة: القراءة مباشرة من الـ env وتخطي قاعدة البيانات للتجربة وضمان الموثوقية
             $adminEmail = config('mail.admin_address') ?? 'ahdkareem.j@gmail.com';
 
             Mail::to($adminEmail)
@@ -67,13 +64,11 @@ class ContactController extends Controller
             $submission->update(['email_sent' => true]);
         } catch (\Throwable $e) {
             Log::error('فشل إرسال إيميلات طلب التواصل: ' . $e->getMessage());
-            $emailError = $e->getMessage();
         }
 
         return response()->json([
             'success' => true,
             'message' => 'تم استلام طلبك بنجاح وسنعود إليك قريباً',
-            'debug_email_error' => $emailError,
         ]);
     }
 }
