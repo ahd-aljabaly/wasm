@@ -53,7 +53,10 @@ class ContactController extends Controller
         // إرسال إيميل إشعار للإدارة وإيميل تأكيد للعميل
 
         try {
-            $adminEmail = config('mail.admin_address') ?? 'ahdkareem.j@gmail.com';
+            // الأولوية لإعداد notification_email من لوحة التحكم (Settings)، وإلا نرجع لقيمة .env كـ fallback احتياطي
+            $adminEmail = \App\Models\Setting::get('notification_email')
+                ?? config('mail.admin_address')
+                ?? 'ahdkareem.j@gmail.com';
 
             Mail::to($adminEmail)
                 ->send(new NewContactSubmission($submission));
