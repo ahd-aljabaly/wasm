@@ -27,3 +27,37 @@ Route::get('/sitemap.xml', function () {
 
 
 
+// manifest.json ديناميكي: يقرأ الشعار الفعلي من الإعدادات بدل ملف ثابت قديم
+Route::get('/manifest.json', function () {
+    $settings = \App\Models\Setting::all()->pluck('value', 'key');
+
+    $logoValue = $settings['logo'] ?? null;
+    $logoUrl = !empty($logoValue)
+        ? ((str_starts_with($logoValue, 'http') || str_starts_with($logoValue, '/')) ? $logoValue : asset('storage/' . $logoValue))
+        : asset('images/logo.svg');
+
+    $siteName = $settings['site_name'] ?? 'Wasm Media';
+
+    return response()->json([
+        'name' => $siteName . ' | وسم ميديا',
+        'short_name' => 'وسم ميديا',
+        'description' => 'وكالة وسم ميديا الإبداعية: هوية بصرية، تسويق رقمي، صناعة محتوى، وحلول التغليف والطباعة الفاخرة.',
+        'start_url' => '/',
+        'display' => 'standalone',
+        'background_color' => '#FDFDFB',
+        'theme_color' => '#172E66',
+        'lang' => 'ar',
+        'dir' => 'rtl',
+        'orientation' => 'portrait-primary',
+        'icons' => [
+            [
+                'src' => $logoUrl,
+                'sizes' => 'any',
+                'type' => 'image/svg+xml',
+                'purpose' => 'any maskable',
+            ],
+        ],
+        'categories' => ['business', 'productivity'],
+        'scope' => '/',
+    ])->header('Content-Type', 'application/manifest+json');
+})->name('manifest');
