@@ -2,27 +2,26 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\Mailer\Bridge\Brevo\Transport\BrevoApiTransport;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        // في الإنتاج: فرض HTTPS لكل الروابط والأصول وروابط الإيميل (يمنع مشاكل المحتوى المختلط)
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
+
+        Mail::extend('brevo', function () {
+            return new BrevoApiTransport((string) config('services.brevo.key'));
+        });
     }
 }
